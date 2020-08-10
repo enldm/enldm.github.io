@@ -13,5 +13,4 @@ reward: false
 [Minimalism]: https://github.com/showzeng/Minimalism
 [Jekyll]: https://jekyllrb.com/
 
-加入我的[Minimalism] 
-[Minimalism]: https://t.me/dmtucao
+<p><a href="https://t.me/dmtucao">加入我的Telegram频道！</a></p>
