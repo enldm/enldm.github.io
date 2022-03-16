@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>Arknights_tools</title>
+    <link href="/2022/03/Arknights_tools/"/>
+    <url>/2022/03/Arknights_tools/</url>
+    
+    <content type="html"><![CDATA[<h1 id="明日方舟工具箱"><a href="#明日方舟工具箱" class="headerlink" title="明日方舟工具箱"></a><a href="https://arkn.lolicon.app/">明日方舟工具箱</a></h1><p>由多为开发者共同开发的明日方舟综合工具箱</p><h2 id="主要功能"><a href="#主要功能" class="headerlink" title="主要功能"></a>主要功能</h2><p>·公开招募机算 + 词条截图识别</p><p>·精英材料机算 + 干员材料预设 + 仓库截图识别 + 刷土规划</p><p>·干员升级机算</p><p>·基建技能筛选</p><h1 id="企鹅物流"><a href="#企鹅物流" class="headerlink" title="企鹅物流"></a><a href="https://penguin-stats.io/">企鹅物流</a></h1><p><a href="https://penguin-stats.cn/">国内镜像站</a></p><h2 id="主要功能-1"><a href="#主要功能-1" class="headerlink" title="主要功能"></a>主要功能</h2><p>关卡素材掉落统计</p><h1 id="寻访记录分析-仅支持官服"><a href="#寻访记录分析-仅支持官服" class="headerlink" title="寻访记录分析 *仅支持官服"></a><a href="https://arkgacha.kwer.top/">寻访记录分析</a> <sub>*仅支持官服<sub></h1><p>手动导入官服抽卡记录，分析各个活动各个星级的爆率</p><h1 id="Arknights-Auto-Helper"><a href="#Arknights-Auto-Helper" class="headerlink" title=" Arknights Auto Helper"></a><a href="https://github.com/ninthDevilHAUNSTER/ArknightsAutoHelper"> Arknights Auto Helper</a></h1><p>明日方舟辅助脚本</p><h2 id="主要功能-2"><a href="#主要功能-2" class="headerlink" title="主要功能"></a>主要功能</h2><p>·自动重复刷图，使用理智药、碎石</p><p>·识别掉落物品，上传企鹅物流数据统计</p><p>·自动选图（从主界面开始到关卡信息界面）</p><p>·自动领取任务奖励</p><p>·公开招募识别</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>明日方舟工具大全</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>关于Markdown</title>
     <link href="/2022/03/%E5%85%B3%E4%BA%8Emarkdown/"/>
     <url>/2022/03/%E5%85%B3%E4%BA%8Emarkdown/</url>
@@ -21,7 +40,7 @@
     <link href="/2022/03/hello_first_post/"/>
     <url>/2022/03/hello_first_post/</url>
     
-    <content type="html"><![CDATA[<h1 id="重建Blog后-2022"><a href="#重建Blog后-2022" class="headerlink" title="重建Blog后-2022"></a>重建Blog后-2022</h1><p>经过两三天的折腾，终于重见天日。由于原有VPS的内存不足、Let’s encrypt续签失败、域名到期等诸多问题，最终还是选择了hexo部署在<a href="https://github.io/">Github pages</a>上的方法。相比于在VPS上折腾LNMP，确实非常快捷方便，同时也比较省心。</p><p>原有的 enldm.me 已更换为 enldm.cyou ，续费更便宜<del>能用就行</del>。但有时候可能会遇到Github pages被阻断也是没有办法的（又尝试套一层cf的免费cdn，要啥自行车）。同时我也好奇如何在md里使用图片（图床可能不稳定且不方便）以及如何在移动端推文。<br>根据我个人的习惯，我更倾向于查看官方的文档，但是过于“专业”的术语有可能可能不如“小白”教程更入门吧。</p><p>希望在正式的发出这篇文章之前我已将上述问题解决~</p><p>关于hexo的认识：<br>hexo与我之前用过的wordpress不同，hexo是静态页面资源，能较大幅度节省内存。但是多个设备之间要采用同步的步骤来搭建环境肯定不如wp一个账户来的快。</p><h1 id="重建Blog前-2021"><a href="#重建Blog前-2021" class="headerlink" title="重建Blog前-2021"></a>重建Blog前-2021</h1><p>首能够建立起来这个网站，多亏了该大佬的<a href="https://www.seoimo.com/wordpress-vps/">详细wordpress教程</a>，请允许我在这第一篇文章好好感谢一下！</p><p>首为什么建立博客？其实像现在的某某笔记、许多网站的专栏也可以满足大部分人的写作需求，但是终归是不自由。但凡脱离某单一平台，可以独立自由地写作，几乎不会受到很大的影响。<del>当然，我自己把网站搞炸了除外。</del> 拥有自己的域名、vps，自由程度相当地高。除此之外，只用一个链接而不是要求下载APP的阅读才是好文明。<sub>重点批评某聊天软件的文章无法被主流搜索引擎搜索到以及许多网站要求下载APP才能继续阅读这类行为。</sub>曾申请了一个微信公众号，到现在为止我就在上面写了篇流水账以及B站专栏水了一篇文章。 <del>懒</del></p><p>作为一个各个方面都只学会了皮毛的“萌新”，在萌新看来是大佬，在大佬看来依旧是萌新，通俗一点讲就是上不上下不下，终归是我太懒了，不愿意去把一件事情钻研透。好在前段时间开了一个Minecraft的JE版服务器才让我更熟悉了一点点Linux的操作，对于本站的建立大概也有一点点的帮助。幸运的是，在昨晚的建立中并没有遇到大的问题，对此我感到还是非常幸运。当然这里不得不提一句基友的网站就莫名其妙地出现了一切问题， <del>遇事不决就重装。</del></p><p>高中开始出于好玩的目的想创建一个属于自己的博客，可惜以前没有足够的精力和金钱来折腾，现在终归是自由了。</p><p>自己一步一步到达目的地后的满足感是不言而喻的。如果你也有想法的话，放心大胆去尝试一下吧！</p><h1 id="特此感谢"><a href="#特此感谢" class="headerlink" title="特此感谢"></a>特此感谢</h1><p>Github</p><p>Wordpress </p><p>VS code</p><p>某云服务提供商 </p><p>某社交平台</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="重建Blog后-2022"><a href="#重建Blog后-2022" class="headerlink" title="重建Blog后-2022"></a>重建Blog后-2022</h1><p>经过两三天的折腾，终于重见天日。由于原有VPS的内存不足、Let’s encrypt续签失败、域名到期等诸多问题，最终还是选择了hexo部署在<a href="https://github.io/">Github pages</a>上的方法。相比于在VPS上折腾LNMP，确实非常快捷方便，同时也比较省心。</p><p>原有的 enldm.me 已更换为 enldm.cyou ，续费更便宜<del>能用就行</del>。但有时候可能会遇到Github pages被阻断也是没有办法的（又尝试套一层cf的免费cdn，要啥自行车）。同时我也好奇如何在md里使用图片（图床可能不稳定且不方便）以及如何在移动端推文。<br>根据我个人的习惯，我更倾向于查看官方的文档，但是过于“专业”的术语有可能可能不如“小白”教程更入门吧。</p><p>希望在正式的发出这篇文章之前我已将上述问题解决~</p><p>关于hexo的认识：<br>hexo与我之前用过的wordpress不同，hexo是静态页面资源，能较大幅度节省内存。但是多个设备之间要采用同步的步骤来搭建环境肯定不如wp一个账户来的快。</p><h1 id="重建Blog前-2021"><a href="#重建Blog前-2021" class="headerlink" title="重建Blog前-2021"></a>重建Blog前-2021</h1><p>首能够建立起来这个网站，多亏了该大佬的<a href="https://www.seoimo.com/wordpress-vps/">详细wordpress教程</a>，请允许我在这第一篇文章好好感谢一下！</p><p>为什么建立博客？像现在的某某笔记、许多网站的专栏也可以满足大部分人的写作需求，但是终归是不“自由”。脱离某单一平台，可以独立自由地写作。<del>当然，我自己把网站搞炸了除外。</del> 拥有自己的域名、vps，自由程度相当地高。除此之外，只用一个链接而不是要求下载APP的阅读才是好文明。<sub>重点批评某聊天软件的文章无法被主流搜索引擎搜索到以及许多网站要求下载APP才能继续阅读这类行为。</sub>曾申请了一个微信公众号，到现在为止我就在上面写了篇流水账以及B站专栏水了一篇文章。 <del>懒</del></p><p>作为一个各个方面都只学会了皮毛的“萌新”，在萌新看来是大佬，在大佬看来依旧是萌新，通俗一点讲就是上不上下不下，终归是我太懒了，不愿意去把一件事情钻研透。好在前段时间开了一个Minecraft的JE版服务器才让我更熟悉了一点点Linux的操作，对于本站的建立大概也有一点点的帮助。幸运的是，在昨晚的建立中并没有遇到大的问题，对此我感到还是非常幸运。当然这里不得不提一句基友的网站就莫名其妙地出现了一切问题， <del>遇事不决就重装。</del></p><p>高中开始出于好玩的目的想创建一个属于自己的博客，可惜以前没有足够的精力和金钱来折腾，现在终归是自由了。</p><p>自己一步一步到达目的地后的满足感是不言而喻的。如果你也有想法的话，放心大胆去尝试一下吧！</p><h1 id="特此感谢"><a href="#特此感谢" class="headerlink" title="特此感谢"></a>特此感谢</h1><p>Github</p><p>Wordpress </p><p>VS code</p><p>Hexo</p><p>Hexo-fluid</p>]]></content>
     
     
     
