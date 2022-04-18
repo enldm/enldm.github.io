@@ -16,21 +16,20 @@
   <meta name="author" content="ENLDM">
   <meta name="keywords" content="">
   
-    <meta name="description" content="明日方舟工具箱由多位开发者共同开发的明日方舟综合工具箱 主要功能·公开招募机算 + 词条截图识别 ·精英材料机算 + 干员材料预设 + 仓库截图识别 + 刷土规划 ·干员升级机算 ·基建技能筛选 企鹅物流国内镜像站 主要功能关卡素材掉落统计 寻访记录分析 *仅支持官服手动导入官服抽卡记录，分析各个活动各个星级的爆率 Arknights Auto Helper明日方舟辅助脚本 主要功能·自动重复刷图">
+    <meta name="description" content="前言为了使用前文所提到的ArknightsAutoHelper，而不占用电脑资源的情况下（指不使用模拟器），尝试使用无线adb连接到手机 什么是adb？全称为Android Debug Bridge，字面意思即调试安卓设备的桥梁 尝试 首先确保没有其他应用（例如：xx手机助手）占用adb端口，以及手机已经支持无线adb  在Android手机上打开：开发人员选项-&gt;USB调试-&gt;无线调">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Arknights_tools">
-<meta property="og:url" content="https://enldm.cyou/2022/03/Arknights_tools/">
+<meta property="og:title" content="如何无线adb">
+<meta property="og:url" content="https://enldm.cyou/2022/04/%E5%A6%82%E4%BD%95%E6%97%A0%E7%BA%BFadb/">
 <meta property="og:site_name" content="Blog EnlDM">
-<meta property="og:description" content="明日方舟工具箱由多位开发者共同开发的明日方舟综合工具箱 主要功能·公开招募机算 + 词条截图识别 ·精英材料机算 + 干员材料预设 + 仓库截图识别 + 刷土规划 ·干员升级机算 ·基建技能筛选 企鹅物流国内镜像站 主要功能关卡素材掉落统计 寻访记录分析 *仅支持官服手动导入官服抽卡记录，分析各个活动各个星级的爆率 Arknights Auto Helper明日方舟辅助脚本 主要功能·自动重复刷图">
+<meta property="og:description" content="前言为了使用前文所提到的ArknightsAutoHelper，而不占用电脑资源的情况下（指不使用模拟器），尝试使用无线adb连接到手机 什么是adb？全称为Android Debug Bridge，字面意思即调试安卓设备的桥梁 尝试 首先确保没有其他应用（例如：xx手机助手）占用adb端口，以及手机已经支持无线adb  在Android手机上打开：开发人员选项-&gt;USB调试-&gt;无线调">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-03-16T14:29:33.000Z">
-<meta property="article:modified_time" content="2022-03-19T07:52:49.008Z">
+<meta property="article:published_time" content="2022-04-18T06:16:30.000Z">
+<meta property="article:modified_time" content="2022-04-18T06:57:47.235Z">
 <meta property="article:author" content="ENLDM">
-<meta property="article:tag" content="明日方舟工具大全">
 <meta name="twitter:card" content="summary_large_image">
   
   
-  <title>Arknights_tools - Blog EnlDM</title>
+  <title>如何无线adb - Blog EnlDM</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -164,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Arknights_tools">
+            <span class="h2" id="subtitle" title="如何无线adb">
               
             </span>
 
@@ -174,8 +173,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-03-16 22:29" pubdate>
-        2022年3月16日 晚上
+      <time datetime="2022-04-18 14:16" pubdate>
+        2022年4月18日 下午
       </time>
     </span>
   
@@ -185,7 +184,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      258 字
+      1k 字
     </span>
   
 
@@ -194,7 +193,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      3 分钟
+      9 分钟
     </span>
   
 
@@ -223,37 +222,73 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Arknights_tools</h1>
+            <h1 style="display: none">如何无线adb</h1>
             
             <div class="markdown-body">
-              <h1 id="明日方舟工具箱"><a href="#明日方舟工具箱" class="headerlink" title="明日方舟工具箱"></a><a target="_blank" rel="noopener" href="https://arkn.lolicon.app/">明日方舟工具箱</a></h1><p>由多位开发者共同开发的明日方舟综合工具箱</p>
-<h2 id="主要功能"><a href="#主要功能" class="headerlink" title="主要功能"></a>主要功能</h2><p>·公开招募机算 + 词条截图识别</p>
-<p>·精英材料机算 + 干员材料预设 + 仓库截图识别 + 刷土规划</p>
-<p>·干员升级机算</p>
-<p>·基建技能筛选</p>
-<h1 id="企鹅物流"><a href="#企鹅物流" class="headerlink" title="企鹅物流"></a><a target="_blank" rel="noopener" href="https://penguin-stats.io/">企鹅物流</a></h1><p><a target="_blank" rel="noopener" href="https://penguin-stats.cn/">国内镜像站</a></p>
-<h2 id="主要功能-1"><a href="#主要功能-1" class="headerlink" title="主要功能"></a>主要功能</h2><p>关卡素材掉落统计</p>
-<h1 id="寻访记录分析-仅支持官服"><a href="#寻访记录分析-仅支持官服" class="headerlink" title="寻访记录分析 *仅支持官服"></a><a target="_blank" rel="noopener" href="https://arkgacha.kwer.top/">寻访记录分析</a> <sub>*仅支持官服<sub></h1><p>手动导入官服抽卡记录，分析各个活动各个星级的爆率</p>
-<h1 id="Arknights-Auto-Helper"><a href="#Arknights-Auto-Helper" class="headerlink" title="Arknights Auto Helper"></a><a target="_blank" rel="noopener" href="https://github.com/ninthDevilHAUNSTER/ArknightsAutoHelper">Arknights Auto Helper</a></h1><p>明日方舟辅助脚本</p>
-<h2 id="主要功能-2"><a href="#主要功能-2" class="headerlink" title="主要功能"></a>主要功能</h2><p>·自动重复刷图，使用理智药、碎石</p>
-<p>·识别掉落物品，上传企鹅物流数据统计</p>
-<p>·自动选图（从主界面开始到关卡信息界面）</p>
-<p>·自动领取任务奖励</p>
-<p>·公开招募识别</p>
-<h1 id="PRTS"><a href="#PRTS" class="headerlink" title="PRTS"></a><a target="_blank" rel="noopener" href="https://prts.wiki/">PRTS</a></h1><p>明日方舟*最全Wiki</p>
+              <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>为了使用前文所提到的<a target="_blank" rel="noopener" href="https://github.com/ArknightsAutoHelper/ArknightsAutoHelper">ArknightsAutoHelper</a>，而不占用电脑资源的情况下（指不使用模拟器），尝试使用无线adb连接到手机</p>
+<p>什么是adb？全称为Android Debug Bridge，字面意思即调试安卓设备的桥梁</p>
+<h1 id="尝试"><a href="#尝试" class="headerlink" title="尝试"></a>尝试</h1><ol start="0">
+<li><p>首先确保没有其他应用（例如：xx手机助手）占用adb端口，以及手机已经支持无线adb</p>
+</li>
+<li><p>在Android手机上打开：开发人员选项-&gt;USB调试-&gt;无线调试</p>
+</li>
+</ol>
+<p>（不同设备的步骤可能不同，本文以MIUI为例，则需要多次点击MIUI版本号打开开发人员选项）</p>
+<ol start="2">
+<li><p>进入无线调试界面，得到IP与端口，以 192.168.1.100:2345 为例</p>
+</li>
+<li><p>在电脑上尝试用adb连接</p>
+</li>
+</ol>
+<p>输入</p>
+<div class="code-wrapper"><pre><code class="hljs">adb connect 192.168.1.100:2345
+</code></pre></div>
+<p>得到</p>
+<div class="code-wrapper"><pre><code class="hljs">adb server version (41) doesn&#39;t match this client (31)
+</code></pre></div>
+<p>手机上的adb版本号为1.0.41，高于电脑上的adb版本1.0.31，更新电脑上的adb即可</p>
+<p>再次输入 </p>
+<div class="code-wrapper"><pre><code class="hljs">adb connect 192.168.1.100:2345
+</code></pre></div>
+<p>得到</p>
+<div class="code-wrapper"><pre><code class="hljs">* daemon not running; starting now at tcp:5037
+* daemon started successfully
+failed to connect to 192.168.0.6:38697
+</code></pre></div>
+<p>为什么无法连接？用USB直捅电脑又没有问题。这时我才注意到了界面有「使用配对码配对装置」，点击后显示「WLAN配对码与IP地址端口」。</p>
+<p>原来是要先配对，怪不得下面的已配对的设备显示为空</p>
+<p>查看adb帮助 </p>
+<div class="code-wrapper"><pre><code class="hljs">adb pair HOST[:PORT] [PAIRING CODE]
+// adb pair IP:端口 配对码 
+// 这里的「配对端口与配对码」与「adb调试端口」是不同的，均由Android给出
+</code></pre></div>
+<p>开始配对</p>
+<div class="code-wrapper"><pre><code class="hljs">adb pair 192.168.1.100:8848 522788
+</code></pre></div>
+<p>出现</p>
+<div class="code-wrapper"><pre><code class="hljs">Successfully paired to 192.168.1.100:8848 [guid=adb-********-******]
+</code></pre></div>
+<p>此时手机上出现已配对的设备及电脑用户名</p>
+<p>再次连接</p>
+<div class="code-wrapper"><pre><code class="hljs">adb connect 192.168.1.100:2345
+</code></pre></div>
+<p>已连接</p>
+<div class="code-wrapper"><pre><code class="hljs">connected to 192.168.1.100:2345
+</code></pre></div>
+<p>查看当前设备</p>
+<div class="code-wrapper"><pre><code class="hljs">adb devices
+</code></pre></div>
+<p>返回如下状态</p>
+<div class="code-wrapper"><pre><code class="hljs">List of devices attached
+192.168.1.100:2345      device
+</code></pre></div>
+<p>状态为device即为连接成功，以后刷机也可以不需要数据线了</p>
 
             </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
                 
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E5%B7%A5%E5%85%B7%E5%A4%A7%E5%85%A8/">明日方舟工具大全</a>
-                    
-                  </div>
                 
               </div>
               
@@ -268,18 +303,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/04/%E5%A6%82%E4%BD%95%E6%97%A0%E7%BA%BFadb/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">如何无线adb</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/03/%E5%85%B3%E4%BA%8Emarkdown/">
-                        <span class="hidden-mobile">关于Markdown</span>
+                      <a href="/2022/03/Arknights_tools/">
+                        <span class="hidden-mobile">Arknights_tools</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

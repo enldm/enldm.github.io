@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>如何无线adb</title>
+    <link href="/2022/04/%E5%A6%82%E4%BD%95%E6%97%A0%E7%BA%BFadb/"/>
+    <url>/2022/04/%E5%A6%82%E4%BD%95%E6%97%A0%E7%BA%BFadb/</url>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>为了使用前文所提到的<a href="https://github.com/ArknightsAutoHelper/ArknightsAutoHelper">ArknightsAutoHelper</a>，而不占用电脑资源的情况下（指不使用模拟器），尝试使用无线adb连接到手机</p><p>什么是adb？全称为Android Debug Bridge，字面意思即调试安卓设备的桥梁</p><h1 id="尝试"><a href="#尝试" class="headerlink" title="尝试"></a>尝试</h1><ol start="0"><li><p>首先确保没有其他应用（例如：xx手机助手）占用adb端口，以及手机已经支持无线adb</p></li><li><p>在Android手机上打开：开发人员选项-&gt;USB调试-&gt;无线调试</p></li></ol><p>（不同设备的步骤可能不同，本文以MIUI为例，则需要多次点击MIUI版本号打开开发人员选项）</p><ol start="2"><li><p>进入无线调试界面，得到IP与端口，以 192.168.1.100:2345 为例</p></li><li><p>在电脑上尝试用adb连接</p></li></ol><p>输入</p><div class="code-wrapper"><pre><code class="hljs">adb connect 192.168.1.100:2345</code></pre></div><p>得到</p><div class="code-wrapper"><pre><code class="hljs">adb server version (41) doesn&#39;t match this client (31)</code></pre></div><p>手机上的adb版本号为1.0.41，高于电脑上的adb版本1.0.31，更新电脑上的adb即可</p><p>再次输入 </p><div class="code-wrapper"><pre><code class="hljs">adb connect 192.168.1.100:2345</code></pre></div><p>得到</p><div class="code-wrapper"><pre><code class="hljs">* daemon not running; starting now at tcp:5037* daemon started successfullyfailed to connect to 192.168.0.6:38697</code></pre></div><p>为什么无法连接？用USB直捅电脑又没有问题。这时我才注意到了界面有「使用配对码配对装置」，点击后显示「WLAN配对码与IP地址端口」。</p><p>原来是要先配对，怪不得下面的已配对的设备显示为空</p><p>查看adb帮助 </p><div class="code-wrapper"><pre><code class="hljs">adb pair HOST[:PORT] [PAIRING CODE]// adb pair IP:端口 配对码 // 这里的「配对端口与配对码」与「adb调试端口」是不同的，均由Android给出</code></pre></div><p>开始配对</p><div class="code-wrapper"><pre><code class="hljs">adb pair 192.168.1.100:8848 522788</code></pre></div><p>出现</p><div class="code-wrapper"><pre><code class="hljs">Successfully paired to 192.168.1.100:8848 [guid=adb-********-******]</code></pre></div><p>此时手机上出现已配对的设备及电脑用户名</p><p>再次连接</p><div class="code-wrapper"><pre><code class="hljs">adb connect 192.168.1.100:2345</code></pre></div><p>已连接</p><div class="code-wrapper"><pre><code class="hljs">connected to 192.168.1.100:2345</code></pre></div><p>查看当前设备</p><div class="code-wrapper"><pre><code class="hljs">adb devices</code></pre></div><p>返回如下状态</p><div class="code-wrapper"><pre><code class="hljs">List of devices attached192.168.1.100:2345      device</code></pre></div><p>状态为device即为连接成功，以后刷机也可以不需要数据线了</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Arknights_tools</title>
     <link href="/2022/03/Arknights_tools/"/>
     <url>/2022/03/Arknights_tools/</url>
