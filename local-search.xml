@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>SM.MS被b了，换个图床吧</title>
+    <link href="/2023/02/SM.MS%E8%A2%ABb%E4%BA%86%EF%BC%8C%E6%8D%A2%E4%B8%AA%E5%9B%BE%E5%BA%8A%E5%90%A7/"/>
+    <url>/2023/02/SM.MS%E8%A2%ABb%E4%BA%86%EF%BC%8C%E6%8D%A2%E4%B8%AA%E5%9B%BE%E5%BA%8A%E5%90%A7/</url>
+    
+    <content type="html"><![CDATA[<h1 id="SM-MS"><a href="#SM-MS" class="headerlink" title="SM.MS"></a>SM.MS</h1><p><a href="https://sm.ms/">SM.MS</a> 图层在好几年前就被大量用户采用，而在2022年末，主域名sm.ms被干扰。现在打开则是超时(<em>ERR_CONNECTION_TIMED_OUT</em>)或者链接重置(<em>ERR_CONNECTION_RESET</em>).</p><p>而图片资源域名<a href="https://s2.loli.net/">s2.loli.net</a>则可以正常打开不受影响。点开后发现其主域名更换为了<a href="https://smms.app/">smms.app</a><img src="https://i.postimg.cc/hG1t227G/screenshot-4.png" alt="alt ???"></p><h1 id="POSTIMAGE"><a href="#POSTIMAGE" class="headerlink" title="POSTIMAGE"></a>POSTIMAGE</h1><p><a href="https://postimg.cc/">POSTIMAGE</a>是本Blog正在使用的图床，个人感觉速度比上面的SM.MS快很多。<a href="https://postimgs.org/img/logo.png">alt ??</a></p><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>待补充…</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>如何无线adb</title>
     <link href="/2022/04/%E5%A6%82%E4%BD%95%E6%97%A0%E7%BA%BFadb/"/>
     <url>/2022/04/%E5%A6%82%E4%BD%95%E6%97%A0%E7%BA%BFadb/</url>
