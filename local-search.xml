@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>一点常用Linux命令</title>
+    <link href="/2023/02/%E4%B8%80%E7%82%B9%E5%B8%B8%E7%94%A8Linux%E5%91%BD%E4%BB%A4/"/>
+    <url>/2023/02/%E4%B8%80%E7%82%B9%E5%B8%B8%E7%94%A8Linux%E5%91%BD%E4%BB%A4/</url>
+    
+    <content type="html"><![CDATA[<h1 id="VIM"><a href="#VIM" class="headerlink" title="VIM"></a>VIM</h1><p>参考文章: </p><ul><li><a href="https://zhuanlan.zhihu.com/p/68111471">https://zhuanlan.zhihu.com/p/68111471</a> </li><li><a href="https://www.bilibili.com/read/cv18082540/">https://www.bilibili.com/read/cv18082540/</a></li></ul><p>简要介绍：</p><ul><li>正常模式 (Normal-mode)</li><li>插入模式 (Insert-mode)</li><li>命令模式 (Command-mode)</li><li>可视模式 (Visual-mode)</li></ul><h1 id="Screen"><a href="#Screen" class="headerlink" title="Screen"></a>Screen</h1><p>参考文章:</p><ul><li><a href="https://blog.csdn.net/carefree2005/article/details/122415714">https://blog.csdn.net/carefree2005/article/details/122415714</a></li></ul><h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><div class="code-wrapper"><pre><code class="hljs">apt updateapt install screenscreen -S Window1    //创建窗口screen -d    //或者使用ctrl+a,然后输入dexit         //结束窗口screen -r id   //重新连接会话</code></pre></div><h1 id="Mount"><a href="#Mount" class="headerlink" title="Mount"></a>Mount</h1><p>在&#x2F;dev下的设备不能直接访问，需要挂载到别的目录(一般是&#x2F;mnt下)</p><p>新建一个目录可供访问</p><div class="code-wrapper"><pre><code class="hljs">mkdir /mnt/disk0</code></pre></div><p>然后选择你需要挂载的分区，可以通过 df -h查看剩余大小来判断</p><div class="code-wrapper"><pre><code class="hljs">mount /dev/sda1 /mnt/disk0</code></pre></div><p>如果想取消挂载</p><div class="code-wrapper"><pre><code class="hljs">umount /dev/sda1</code></pre></div><p>也可以修改&#x2F;etc&#x2F;fstab来实现开机自动挂载。</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>OMV</title>
     <link href="/2023/02/OMV/"/>
     <url>/2023/02/OMV/</url>
