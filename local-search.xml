@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>树莓派上跑NAPCAT和Nonebot2</title>
+    <link href="/2024/09/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E8%B7%91NAPCAT%E5%92%8CNonebot2/"/>
+    <url>/2024/09/%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E8%B7%91NAPCAT%E5%92%8CNonebot2/</url>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>什么是Napcat？什么是Nonebot2？简单来说，Napcat可以理解为特殊的QQ版本，作为bot的服务端；Nonebot2作为客户端，与Napcat进行通信。鉴于CQHTTP的协议库?一再被封杀，这种基于官方客户端的实现相比起来稳定了许多，TX只能在外部进行检测。</p><h1 id="烧录镜像"><a href="#烧录镜像" class="headerlink" title="烧录镜像"></a>烧录镜像</h1><p>本着简单方便地原则，在Windows上跑NTQQ再用Liteloader实现最简单（毕竟还有一键脚本），但是对于一张插着C3内存卡的树莓派的来说跑个WoA来说还是有点费力。说到这我才想起来我博客的一代目的【在树莓派上运行Windows】文章没搬过来，也找不到了。</p><p>离谱的是，在ubuntu.cn上树莓派的镜像直接404了；改为到ubuntu.com下载Ubuntu Server。电脑上吃灰了三年的balenaEtcher还没删，想着将就用一下，没想到最后验证的时候提示烧录失败；重新烧录之后倒是没问题，用SSH连上去提示需要用publickey。玛德用树莓派官方工具刷的时候配置一下密码登录和WIFI立马成功。</p><p>值得吐槽的是开启WLAN0之后，树莓派会自动禁用eh0有线网，手动打开网卡之后在Ifconfig的输出里面，eth0并没有拿到IPV4地址；路由器后台却能查看到两个树莓派设备已连接并分配了IPV4地址。</p><p>在写文章的时候好奇搜了一下，发现是原来在&#x2F;etc&#x2F;netplan&#x2F;50-cloud-init.yaml中eth0没配置，更改配置后如下：</p><div class="code-wrapper"><pre><code class="hljs">network:version: 2wifis:    renderer: networkd    wlan0:        access-points:            WIFI_NAME:                password:  WIFI_PASSWORD        dhcp4: true        optional: trueethernets:    eth0:        dhcp4: true</code></pre></div><h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>Docker活了，但是Docker Hub还在dns污染中，拉取镜像还是只能用镜像源。好在GitHub中都有不少教程与项目，我采用的是<a href="dockerproxy.cn">dockerproxy.cn</a>。Docker管理工具依旧用的是<a href="https://www.portainer.io/">Portcontainer</a>，剩下了敲命令的繁琐。</p><h1 id="Napcat"><a href="#Napcat" class="headerlink" title="Napcat"></a>Napcat</h1><p>Ubuntu Server没有GUI，只能跑无头docker版的<a href="https://github.com/NapNeko/NapCat-Docker">QQ NapCat-Docker</a>。NB2现在推荐使用反向Websocket链接。在折腾很久之后还是推荐直接用host方式直连接网络。拉取镜像之后启动命令如下：</p><div class="code-wrapper"><pre><code class="hljs">docker run -d \-e ACCOUNT=&lt;机器人qq&gt; \-e WSR_ENABLE=true \-e WS_URLS=&#39;[&quot;ws://127.0.0.1:3000/onebot/v11/ws&quot;]&#39; \-e NAPCAT_GID=$(id -g) \-e NAPCAT_UID=$(id -u) \--name napcat \--restart=always \mlikiowa/napcat-docker:latest</code></pre></div><p>实际部署的时候还需要加上sudo，以及最后一排最前面加上镜像源的地址（直接替换配置的就不用了）</p><p>此时需要在webui里面扫码登录，打开<a href="http://ip:6099/webui">http://ip:6099/webui</a>，提示需要输入密码。密码需要进入docker里面，为了方便我就不用命令行进去，通过Portcontainer进入container，exec console进去之后输入</p><div class="code-wrapper"><pre><code class="hljs">cat napcat/config/webui.json</code></pre></div><p>在输出的字段中找到密码填入并用手机扫码登录即可。</p><p>由于是登录的Linux QQ桌面端，登录风控没有那么严格，基本也可以远程扫码登录。</p><p>进入<a href="http://ip:6099/webui/config.html">http://ip:6099/webui/config.html</a> 可以更改别的配置。（需要提醒的是如果此时想用别的端口，并且不是host模式的话需要重新映射端口到容器外）</p><h1 id="Nonebot2"><a href="#Nonebot2" class="headerlink" title="Nonebot2"></a>Nonebot2</h1><p>接下来就是Bot的安装了，非常详细的安装教程在<a href="https://nonebot.dev/docs/quick-start">官方文档</a>有写。如果不换源，移动的体验甚至远远不如Ubuntu官方源来的快；需要的话可以自行替换各大学校源。</p><p>安装完之后在项目文件夹中还需要在隐藏文件中编辑一下端口</p><div class="code-wrapper"><pre><code class="hljs">nano .env.prod</code></pre></div><p>填入PORT&#x3D;3000，保存后重新运行</p><div class="code-wrapper"><pre><code class="hljs">nb run</code></pre></div><p>你的非官方QQ机器人就可以跑起来了。</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>240518成都充电小记</title>
     <link href="/2024/05/240518%E6%88%90%E9%83%BD%E5%85%85%E7%94%B5%E5%B0%8F%E8%AE%B0/"/>
     <url>/2024/05/240518%E6%88%90%E9%83%BD%E5%85%85%E7%94%B5%E5%B0%8F%E8%AE%B0/</url>
