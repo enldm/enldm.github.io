@@ -16,15 +16,15 @@
   <meta name="author" content="ENLDM">
   <meta name="keywords" content="">
   
-    <meta name="description" content="404 - 页面未找到              body {             display: flex;             justify-content: center;             align-items: center;             height: 100vh;             margin: 0;">
+    <meta name="description" content="404 - 页面未找到              &#x2F;* 清除所有默认样式 *&#x2F;         html,         body {             margin: 0;             padding: 0;             width: 100%;             height: 100%;             overflow">
 <meta property="og:type" content="website">
 <meta property="og:title" content="page.title">
 <meta property="og:url" content="https://enldm.cyou/404">
 <meta property="og:site_name" content="Blog EnlDM">
-<meta property="og:description" content="404 - 页面未找到              body {             display: flex;             justify-content: center;             align-items: center;             height: 100vh;             margin: 0;">
+<meta property="og:description" content="404 - 页面未找到              &#x2F;* 清除所有默认样式 *&#x2F;         html,         body {             margin: 0;             padding: 0;             width: 100%;             height: 100%;             overflow">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-08-31T05:16:02.962Z">
-<meta property="article:modified_time" content="2025-08-31T05:16:02.962Z">
+<meta property="article:published_time" content="2025-08-31T05:25:12.849Z">
+<meta property="article:modified_time" content="2025-08-31T05:25:12.849Z">
 <meta property="article:author" content="ENLDM">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -191,102 +191,63 @@
 
 <article class="page-content">
   <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 
 <head>
     <meta charset="UTF-8">
     <title>404 - 页面未找到</title>
     <style>
+        /* 清除所有默认样式 */
+        html,
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
-            font-family: Arial, sans-serif;
-            /* 默认背景颜色 */
-            background-color: #333;
-            color: white;
-            position: relative;
+            padding: 0;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            /* 防止滚动条闪烁 */
+            /* 隐藏滚动条 */
         }
-    
+
+        /* 背景图全屏铺满 */
         .background-image {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
-            /* 关键：使用 vw 确保横向铺满屏幕 */
             height: 100vh;
-            /* 纵向铺满视口高度 */
-            background-size: cover;
-            background-position: center;
-            opacity: 1;
-            /* 背景图片不透明（你写的是 1，不是半透明） */
+            background-size: 100% 100%;
+            /* 拉伸铺满 */
+            background-position: top left;
+            /* 左上角对齐 */
+            background-repeat: no-repeat;
             z-index: -1;
-            /* 推到内容后面 */
-        }
-
-        .content {
-            text-align: center;
-            z-index: 1;
-            position: relative;
-        }
-
-        h1 {
-            font-size: 3em;
-            margin-bottom: 0.2em;
-        }
-
-        .btn-back {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 20px;
-            font-size: 1.5em;
-            color: white;
-            background-color: rgba(74, 144, 226, 0.8); /* 半透明蓝色 */
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .btn-back:hover {
-            background-color: rgba(74, 144, 226, 1); /* 更深一点的蓝色 */
+            /* 确保在最底层 */
         }
     </style>
 </head>
 
 <body>
 
-<!-- 背景图片 -->
-<div class="background-image" id="backgroundImage"></div>
+    <!-- 唯一的元素：背景图容器 -->
+    <div class="background-image" id="backgroundImage"></div>
 
-<!-- 页面内容 -->
-<div class="content">
-    <h1>404</h1>
-    <!-- 返回首页按钮 -->
-    <!-- <a href="/" class="btn-back">返回首页</a> -->
-</div>
+    <script>
+        // 定义图片路径
+        const images = [
+            "/img/404/bgd_404_01.jpg",
+            "/img/404/bgd_404_02.jpg",
+            "/img/404/bgd_404_03.jpg",
+            "/img/404/bgd_404_04.jpg",
+            "/img/404/bgd_404_05.jpg",
+            "/img/404/bgd_404_06.jpg",
+        ];
 
-<script>
-    // 定义本地图片路径
-    const images = [
-        "/img/404/bgd_404_01.jpg",
-        "/img/404/bgd_404_02.jpg",
-        "/img/404/bgd_404_03.jpg",
-        "/img/404/bgd_404_04.jpg",
-        "/img/404/bgd_404_05.jpg",
-        "/img/404/bgd_404_06.jpg",
-    ];
+        // 随机选择图片
+        const randomImage = images[Math.floor(Math.random() * images.length)];
 
-    // 随机选择一张图片
-    const randomImage = images[Math.floor(Math.random() * images.length)];
-
-    // 设置背景图片
-    document.getElementById('backgroundImage').style.backgroundImage = 'url(' + randomImage + ')';
-</script>
+        // 设置背景
+        document.getElementById('backgroundImage').style.backgroundImage = 'url(' + randomImage + ')';
+    </script>
 
 </body>
 
