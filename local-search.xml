@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>主题替换国内css加速访问</title>
+    <link href="/2025/09/%E4%B8%BB%E9%A2%98%E6%9B%BF%E6%8D%A2%E5%9B%BD%E5%86%85css%E5%8A%A0%E9%80%9F%E8%AE%BF%E9%97%AE/"/>
+    <url>/2025/09/%E4%B8%BB%E9%A2%98%E6%9B%BF%E6%8D%A2%E5%9B%BD%E5%86%85css%E5%8A%A0%E9%80%9F%E8%AE%BF%E9%97%AE/</url>
+    
+    <content type="html"><![CDATA[<p>众所周知：在大陆，即使是可以直连访问的网站，都会因为神秘力量收到干扰。</p><p>Fuild 主题内置的地址是 jsdelivr 的 cdn，在大陆基本上也是断断续续的可用状态，这就导致有时候页面样式半天加载不出来。</p><h1 id="一键替换"><a href="#一键替换" class="headerlink" title="一键替换"></a>一键替换</h1><p>查询 Fluid 的官方文档（<a href="https://fluid-dev.github.io/hexo-fluid-docs/guide/#%E8%A6%86%E7%9B%96%E9%85%8D%E7%BD%AE">https://fluid-dev.github.io/hexo-fluid-docs/guide/#%E8%A6%86%E7%9B%96%E9%85%8D%E7%BD%AE</a> ）：</p><div class="code-wrapper"><pre><code class="hljs">    所有静态资源文件的 Url 可以通过主题配置中的 static_prefix 配置项修改。比如需要指定公共 CDN 的 JQuery 库，只需将原配置改为：    static_prefix:    # ...    jquery: https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/</code></pre></div><p>我采用的是注入方式安装的主题，打开_config.fluid.yml，拉到最下面，添加对应的 CSS 样式以及版本号。如果你也想用 cdn.bootcdn.net 且 fluid 版本号 “hexo-theme-fluid”: “^1.8.14”, 直接抄作业就行（但是不知道为什么 <a href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css">https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css</a> 一直不生效，好像是不要写后缀；有些可能没覆盖全，自行查看下面的教程）</p><div class="code-wrapper"><pre><code class="hljs">    # 静态资源替换    static_prefix:    bootstrap: https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2    nprogress: https://cdn.bootcdn.net/ajax/libs/nprogress/0.2.0/    jquery: https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/    # 2.1.0没有 要2.0.0    typed: https://cdn.bootcdn.net/ajax/libs/typed.js/2.0.0/    github-markdown-css: https://cdn.bootcdn.net/ajax/libs/github-markdown-css/4.0.0/    hint: https://cdn.bootcdn.net/ajax/libs/hint.css/2.7.0/    highlight: https://cdn.bootcdn.net/ajax/libs/highlight.js/10.7.3/    fancybox: https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/    tocboc: https://cdn.bootcdn.net/ajax/libs/tocbot/4.36.4/    anchor-js: https://cdn.bootcdn.net/ajax/libs/anchor-js/4.3.1/    clipboard: https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.11/</code></pre></div><h1 id="手动替换"><a href="#手动替换" class="headerlink" title="手动替换"></a>手动替换</h1><p>按下 F12 打开 Network 一栏，选择 CSS，查看哪些没生效。举个例子： <a href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css">https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css</a></p><p>打开国内 cdn：<br><a href="https://cdn.bootcdn.net/">https://cdn.bootcdn.net</a></p><p>搜索 highlight.js，切换到 10 开头的任意一个版本（因为 highlight.js@10，推荐最后一个版本，例如 10.7.3），复制链接</p><p><a href="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.7.3">https://cdn.bootcdn.net/ajax/libs/highlight.js/10.7.3</a></p><p>放到上述文件中即可，保存并重新生成、部署。<br>highlight: <a href="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.7.3/">https://cdn.bootcdn.net/ajax/libs/highlight.js/10.7.3/</a></p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>那一年的夏天，绿色起来</title>
     <link href="/2025/08/%E9%82%A3%E4%B8%80%E5%B9%B4%E7%9A%84%E5%A4%8F%E5%A4%A9%EF%BC%8C%E7%BB%BF%E8%89%B2%E8%B5%B7%E6%9D%A5/"/>
     <url>/2025/08/%E9%82%A3%E4%B8%80%E5%B9%B4%E7%9A%84%E5%A4%8F%E5%A4%A9%EF%BC%8C%E7%BB%BF%E8%89%B2%E8%B5%B7%E6%9D%A5/</url>
