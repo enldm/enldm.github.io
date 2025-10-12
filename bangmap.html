@@ -55,8 +55,11 @@
         </div>
 
         <div class="info-panel" id="infoPanel">
-            <p>Info:海外以及各地高校群号也接受投稿中！</p>
-            <p>投稿方式：发送邮件/QQ群/BOT投稿/在线表格开发中</p>
+            <p>📢 海外以及各地高校群号也接受投稿中！</p>
+            <p>💊 请不要举办网站！没备案恳请放过！</p>
+            <p>✉️ 投稿方式：发送邮件/QQ群/BOT投稿/在线表格开发中</p>
+            <p>❤ 特别鸣谢：zkylin enldm</p>
+
         </div>
     </div>
 
@@ -103,7 +106,7 @@
         };
 
         // 加载阿里云的中国地图数据
-        fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json')
+        fetch('mapdata.json')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -215,9 +218,9 @@
 
             })
             .catch(error => {
-                console.error('地图数据加载失败:', error);
+                console.error('⚠地图数据加载失败:', error);
                 document.getElementById('infoPanel').innerHTML =
-                    `<p style="color: red;">地图数据加载失败：${error.message}</p>
+                    `<p style="color: red;">⚠地图数据加载失败：${error.message}</p>
                      <p>请检查网络连接或稍后重试。</p>`;
             });
 
