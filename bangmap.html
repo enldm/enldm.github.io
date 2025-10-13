@@ -11,7 +11,10 @@
             font-family: 'Microsoft YaHei', Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f0f2f5;
+            background-image: url('https://bang-dream.com/img/top/kv-slide-loading-bg.png');
+            background-repeat: repeat;
+            background-attachment: fixed;
+            /* 可选：让背景随页面滚动 */
         }
 
         .container {
@@ -27,9 +30,12 @@
         #map {
             width: 100%;
             height: 700px;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.3);
+            /* 白色背景，70% 不透明 */
             border-radius: 8px;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(4px);
+            /* 可选：毛玻璃效果，更美观 */
         }
 
         .info-panel {
@@ -55,11 +61,15 @@
         </div>
 
         <div class="info-panel" id="infoPanel">
+            <p>🔧 工具大全：<a href="https://bestdori.com/">Bestdori</a> <a href="https://bang-dream.com/">BanG-Dream官网</a>
+                <a href="https://game.bilibili.com/bangdream/exchange/">手游兑换码</a>
+            </p>
             <p>📢 海外以及各地高校群号也接受投稿中！</p>
             <p>💊 请不要举办网站！没备案恳请放过！</p>
             <p>✉️ 投稿方式：发送邮件/QQ群/BOT投稿/在线表格开发中</p>
-            <p>❤ 特别鸣谢：zkylin enldm</p>
-
+            <p>✉️ 投稿勘误：加入Q群 636949985 或发送邮件至 <a href="mailto:admin@enldm.cyou">admin@enldm.cyou</a></p>
+            <p style="text-align: center;">❤ 特别鸣谢：<a href="https://seieya.ip-ddns.com/">@zkylin</a> <a
+                    href="https://enldm.cyou">@enldm</a></p>
         </div>
     </div>
 
@@ -164,7 +174,8 @@
                 "★②\t921701711",
                 "成都市\t837492457",
                 "绵阳市\t1004025987",
-                "达州市\t1009535558"
+                "达州市\t1009535558",
+                "德阳市\t1005857913"
             ],
             "贵州省": [
                 "★\t653588294"
@@ -304,6 +315,7 @@
                 const option = {
                     title: {
                         text: '点击省份查看群号',
+                        subtext: '欢迎收藏转发分享本网站',
                         left: 'center',
                         textStyle: {
                             fontSize: 20,
@@ -335,37 +347,40 @@
                             type: 'map',
                             map: 'china',
                             roam: true,  // 允许缩放和平移
-                            zoom: 1.2,
+                            zoom: 1.6,
                             center: [105, 36],
                             label: {
                                 show: true,
-                                fontSize: 10,
+                                fontSize: 15,
                                 color: '#333',
+                                fontWeight: 1300,
                                 formatter: function (params) {
-                                    // 一些省份名称较长，可以适当处理
-                                    const name = params.name;
-                                    if (name.length > 6) {
-                                        return name.substring(0, 4) + '...';
-                                    }
+                                    let name = params.name;
+                                    // 去除特定后缀
+                                    name = name
+                                        .replace(/特别行政区$/, '')
+                                        .replace(/壮族自治区$/, '省')
+                                        .replace(/维吾尔自治区$/, '省')
+                                        .replace(/回族自治区$/, '省')
                                     return name;
                                 }
                             },
                             itemStyle: {
-                                areaColor: '#e6f7ff',
-                                borderColor: '#91d5ff',
-                                borderWidth: 1.5
+                                areaColor: '#fcb3c8',
+                                borderColor: '#e00052',
+                                borderWidth: 1.0
                             },
                             emphasis: {
                                 itemStyle: {
-                                    areaColor: '#69b1ff',
-                                    shadowBlur: 10,
+                                    areaColor: '#e00052',
+                                    shadowBlur: 20,
                                     shadowColor: 'rgba(0, 0, 0, 0.3)'
                                 },
                                 label: {
                                     show: true,
                                     color: '#fff',
                                     fontSize: 12,
-                                    fontWeight: 'bold'
+                                    fontWeight: 35
                                 }
                             }
                         }
