@@ -38,20 +38,19 @@
 
         #map {
             width: 100%;
-            height: 700px;
-            background-color: rgba(255, 255, 255, 0.3);
-            /* 白色背景，70% 不透明 */
-            border-radius: 8px;
+            height: 40vh;
+            max-height: 700px;
+            min-height: 400px;
+            background-color: rgba(255, 255, 255, 0);
+            border-radius: 20px;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(4px);
-            /* 可选：毛玻璃效果，更美观 */
         }
 
         .info-panel {
             margin-top: 20px;
             padding: 20px;
             background-color: #fff;
-            border-radius: 8px;
+            border-radius: 20px;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
         }
     </style>
@@ -70,7 +69,9 @@
         </div>
 
         <div class="info-panel" id="infoPanel">
-            <p>开发&更新日志</p>
+            <p>🔗 <a
+                    href="https://enldm.cyou/2025/10/%E5%85%A8%E5%9B%BD%E9%82%A6%E9%82%A6%E5%9C%B0%E5%9B%BE%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/">开发&更新日志</a>
+            </p>
             <p>🔧 工具大全：<a href="https://bestdori.com/">Bestdori</a> <a href="https://bang-dream.com/">BanG-Dream官网</a>
                 <a href="https://game.bilibili.com/bangdream/exchange/">手游兑换码</a>
             </p>
@@ -87,7 +88,7 @@
         // 初始化ECharts
         const myChart = echarts.init(document.getElementById('map'));
 
-        // 自定义省份城市数据（你可以根据需要修改）
+        // 自定义省份城市数据
         const provinceCities = {
             "辽宁省": [
                 "★\t201554121",
@@ -185,7 +186,10 @@
                 "成都市\t837492457",
                 "绵阳市\t1004025987",
                 "达州市\t1009535558",
-                "德阳市\t1005857913"
+                "德阳市\t1005857913",
+                "四川高校邦邦联合会\t318652734",
+                "成都理工大学-宝批龙邦\t709393017",
+                "西南石油大学-⭐西柚邦多利同好会⭐\t1032539210",
             ],
             "贵州省": [
                 "★\t653588294"
@@ -305,11 +309,17 @@
             "台湾省": [
                 "巴哈群\t应管理员要求暂不收录",
                 "天下第一邦\tdiscord群组：discord.gg/bestbandreamers"
+            ],
+            "海外": [
+                "北美洲\t北美炸梦同好会\t 958751334",
+                "北美洲\tBangdream北美中文抱团社团\t discord.gg/bandori01",
+                "亚洲\t日本BanG Dream频道群\t 753572532",
+                "澳洲\t澳大利亚微信群\t 群主微信: lhr0615",
+
             ]
         };
 
-        // 加载阿里云的中国地图数据
-        //fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json')
+        // 加载中国地图数据
         fetch('mapdata.json')
             .then(response => {
                 if (!response.ok) {
@@ -324,7 +334,7 @@
                 // 配置地图选项
                 const option = {
                     title: {
-                        text: '点击省份查看群号',
+                        text: '点击省份下滑查看群号',
                         subtext: '欢迎收藏转发分享本网站',
                         left: 'center',
                         textStyle: {
@@ -372,6 +382,7 @@
                                         .replace(/壮族自治区$/, '省')
                                         .replace(/维吾尔自治区$/, '省')
                                         .replace(/回族自治区$/, '省')
+                                        .replace(/自治区$/, '')
                                     return name;
                                 }
                             },
@@ -394,31 +405,94 @@
                                 }
                             }
                         }
+                    ],
+                    graphic: [
+                        {
+                            type: 'group',
+                            left: '40px',   // 距离左侧
+                            top: '40px',    // 距离顶部
+                            name: 'btn-overseas',
+                            children: [
+                                {
+                                    type: 'rect',
+                                    shape: {
+                                        width: 80,
+                                        height: 30,
+                                        r: 5 // 圆角
+                                    },
+                                    style: {
+                                        fill: '#5470c6'
+                                    },
+                                    key: 'overseas-btn',
+                                    // 鼠标样式
+                                    cursor: 'pointer'
+                                },
+                                {
+                                    type: 'text',
+                                    style: {
+                                        text: '海外',
+                                        fontSize: 12,
+                                        fontWeight: 'bold',
+                                        fill: '#fff',
+                                        align: 'center',
+                                        verticalAlign: 'middle',
+                                        x: 40,
+                                        y: 15
+                                    }
+                                }
+                            ]
+                        }
                     ]
+
                 };
 
                 // 设置配置项
                 myChart.setOption(option);
 
                 // 添加点击事件
+                // 封装：统一的信息面板更新函数
+                function updateInfoPanel(title, citiesList) {
+                    const infoPanel = document.getElementById('infoPanel');
+                    if (!infoPanel) return;
+
+                    const content = Array.isArray(citiesList) && citiesList.length > 0
+                        ? citiesList.map(city => `
+            <p style="
+                padding: 4px 12px;
+                border-radius: 4px;
+                font-size: 20px;
+                margin: 4px 0;
+                background: #f0f7ff;
+                color: #333;
+                white-space: nowrap;
+            ">${city}</p>
+          `).join('')
+                        : '<p style="color: #999; font-size: 18px;">暂无数据</p>';
+
+                    infoPanel.innerHTML = `
+        <h1>${title}</h1>
+        <h2><strong>下属列表：</strong></h2>
+        <div style="margin-top: 10px;">
+            ${content}
+        </div>
+    `;
+                }
+
+                // ECharts 点击事件（优化后）
                 myChart.on('click', function (params) {
+                    // 情况1：点击的是“海外”按钮
+                    if (params.componentType === 'graphic') {
+                        const overseasData = provinceCities['海外'] || ['暂无海外数据'];
+                        updateInfoPanel('🌍 海外', overseasData);
+                        return;
+                    }
+
+                    // 情况2：点击的是地图上的省份
                     const provinceName = params.name;
                     const cities = provinceCities[provinceName] || ['暂无该省数据'];
 
-                    // 更新信息面板
-                    const infoPanel = document.getElementById('infoPanel');
-                    infoPanel.innerHTML = `
-                    <h1>📍 ${provinceName}</h1>
-                    <h2><strong>下属列表：</strong></h2>
-                     <div style="margin-top: 10px;">
-                      ${cities.map(city =>
-                        `<p style="
-                    padding: 4px 12px; border-radius: 4px; font-size: 20px; margin: 4px 0;">
-                    ${city}
-                     </p>`
-                    ).join('')}
-                    </div>
-                    `;
+                    // 使用统一函数更新面板
+                    updateInfoPanel(`📍 ${provinceName}`, cities);
                 });
 
                 // 添加加载完成提示
