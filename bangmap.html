@@ -188,9 +188,15 @@
                 "达州市\t1009535558",
                 "德阳市\t1005857913",
                 "四川高校邦邦联合会\t318652734",
+                "四川大学-寺川大学桃园结义\t598806063",
+                "电子科技大学-邦邦同好会\t745318614",
+                "西南交通大学-2.5次元企划同好会\t1058757033",
+                "川北医学院-南充声豚集中地\t836493581",
+                "西南财经大学-财兵Dreamers Go\t626699647",
                 "成都理工大学-宝批龙邦\t709393017",
                 "西南石油大学-⭐西柚邦多利同好会⭐\t1032539210",
                 "四川师范大学-少女偶像企划同好会\t872387921",
+                "四川文理学院-少女乐队同好会\t961289644",
             ],
             "贵州省": [
                 "★\t653588294"
@@ -410,23 +416,25 @@
                     graphic: [
                         {
                             type: 'group',
-                            left: '40px',   // 距离左侧
-                            top: '40px',    // 距离顶部
+                            left: '20px',
+                            top: '40px',
                             name: 'btn-overseas',
+
                             children: [
                                 {
                                     type: 'rect',
                                     shape: {
-                                        width: 80,
+                                        width: 40,
                                         height: 30,
-                                        r: 5 // 圆角
+                                        r: 5,
                                     },
                                     style: {
-                                        fill: '#5470c6'
+                                        fill: '#5470c6',
                                     },
                                     key: 'overseas-btn',
                                     // 鼠标样式
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
+
                                 },
                                 {
                                     type: 'text',
@@ -437,9 +445,12 @@
                                         fill: '#fff',
                                         align: 'center',
                                         verticalAlign: 'middle',
-                                        x: 40,
-                                        y: 15
-                                    }
+                                        x: 20,
+                                        y: 15,
+                                        textAlign: 'center',
+                                        verticalAlign: 'middle'
+                                    },
+
                                 }
                             ]
                         }
@@ -465,7 +476,7 @@
                 margin: 4px 0;
                 background: #f0f7ff;
                 color: #333;
-                white-space: nowrap;
+                white-space: normal;
             ">${city}</p>
           `).join('')
                         : '<p style="color: #999; font-size: 18px;">暂无数据</p>';
@@ -473,9 +484,9 @@
                     infoPanel.innerHTML = `
         <h1>${title}</h1>
         <h2><strong>下属列表：</strong></h2>
-        <div style="margin-top: 10px;">
+        <p style="margin-top: 10px;">
             ${content}
-        </div>
+        </p>
     `;
                 }
 
