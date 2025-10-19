@@ -551,6 +551,48 @@
                 window.addEventListener('resize', function () {
                     myChart.resize();
                 });
+
+                // 在线投稿
+                async function submitMessage() {
+                    const message = document.getElementById('msg').value.trim();
+                    const turnstileToken = window.turnstile?.getResponse();
+
+                    if (!message || message.length > 1000) {
+                        alert('请输入 1-1000 字符的消息');
+                        return;
+                    }
+
+                    if (!turnstileToken) {
+                        alert('请完成人机验证');
+                        return;
+                    }
+
+                    const url = 'https://tgapi.enldm.cyou/'; // 你的 Worker 地址
+
+                    try {
+                        const res = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                message,
+                                'cf-turnstile-response': turnstileToken
+                            })
+                        });
+
+                        const data = await res.json();
+
+                        if (data.success) {
+                            alert('✅ 消息已发送！');
+                            document.getElementById('msg').value = '';
+                            window.turnstile.reset(); // 重置验证码
+                        } else {
+                            alert('❌ 发送失败：' + (data.error || '未知错误'));
+                        }
+                    } catch (err) {
+                        alert('网络错误，请稍后重试');
+                        console.error(err);
+                    }
+                }
             </script>
 </body>
 
