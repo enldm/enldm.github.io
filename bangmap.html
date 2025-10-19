@@ -15,6 +15,8 @@
         data-website-id="ad547ccf-627a-4293-a348-8ef6c860aa63"></script>
     <title>全国BanG Dream!同好会地图</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+    <!-- 加载 Turnstile JS -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <style>
         body {
             font-family: 'Microsoft YaHei', Arial, sans-serif;
@@ -82,395 +84,420 @@
             <p style="text-align: center;">❤ 特别鸣谢：<a href="https://seieya.ip-ddns.com/">@zkylin</a> <a
                     href="https://enldm.cyou">@enldm</a></p>
         </div>
-    </div>
 
-    <script>
-        // 初始化ECharts
-        const myChart = echarts.init(document.getElementById('map'));
+        <div id="contact-form"
+            style="max-width: 500px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+            <h3>在线投稿</h3>
+            <textarea id="msg" placeholder="请输入投稿内容，请包含具体地区信息/高校全称+群名+正确的群号" rows="4" style="
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-sizing: border-box;
+        font-size: 15px;
+        color: #333;
+        resize: vertical;
+        transition: border 0.3s ease;
+    "></textarea>
+            <!-- Turnstile Widget -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAAB7bLKDGHTTCmU9N" data-theme="light" data-size="normal">
+                </div>
+                <button onclick="submitMessage()"
+                    style="padding: 10px 20px; background: #0088cc; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    发送到 Telegram
+                </button>
+            </div>
 
-        // 自定义省份城市数据
-        const provinceCities = {
-            "辽宁省": [
-                "★\t201554121",
-                "沈阳市\t829012626",
-                "大连市\t732833053"
-            ],
-            "吉林省": [
-                "★\t170930018",
-                "延边朝鲜族自治州\t615237635"
-            ],
-            "黑龙江省": [
-                "★\t692973980"
-            ],
-            "广东省": [
-                "广州市①群\t513069286",
-                "广州市②群\t538334462",
-                "广州市增城区\t913229647",
-                "广州市越秀区\t1042451105",
-                "广州邦o\t390485074",
-                "深圳市\t934594049",
-                "东莞市\t928106957",
-                "阳江市\t685024751",
-                "湛江市\t1091154609",
-                "潮汕地区\t813803622",
-                "珠海市\t940731770",
-                "惠州市\t559784382",
-                "江门市\t106377847",
-                "江门市台山市\t1048336431",
-                "佛山市\t1026918347",
-                "佛山市顺德区\t808453663",
-                "佛山市南海区\t787157262",
-                "中山市\t994772024",
-                "番禺市南沙区\t253622060",
-                "茂名市\t604529419",
-                "韶关市\t850285086",
-                "肇庆市\t682071770",
-                "河源市\t1047863785"
-            ],
-            "广西壮族自治区": [
-                "★\t197263715",
-                "南宁市\t912886747",
-                "南宁邦o\t1049723846",
-                "河池市\t1005617542",
-                "柳州市\t958066206",
-                "桂林市\t486534235",
-                "梧州市\t813383545",
-                "贵港市\t856329935",
-                "百色市\t1039141082",
-                "北部湾地区\t995632325",
-                "崇左市\t1028745113",
-                "玉林市\t1028745113"
-            ],
-            "海南省": [
-                "★\t120854332"
-            ],
-            "河南省": [
-                "★\t722752126"
-            ],
-            "湖北省": [
-                "游戏群\t953865108",
-                "武汉市\t933842046",
-                "黄冈市\t942932442",
-                "宜昌市\t833672595",
-                "荆州市\t661586435",
-                "荆门市\t761713177",
-                "襄阳市\t534801131",
-                "随州市\t992982589",
-                "孝感市\t1039169038",
-                "黄石市\t975881505"
-            ],
-            "湖南省": [
-                "长沙市\t689865195",
-                "湘潭市\t702817846",
-                "衡阳市\t967279281",
-                "岳阳市\t545071198"
-            ],
-            "青海省": [
-                "★\t692015303"
-            ],
-            "新疆维吾尔自治区": [
-                "★\t950051488"
-            ],
-            "陕西省": [
-                "★\t626356375",
-                "西安市\t689914087"
-            ],
-            "重庆市": [
-                "西南联合群\t692833338",
-                "①群\t926266398",
-                "②群\t878533643"
-            ],
-            "四川省": [
-                "★①\t828395737",
-                "★②\t921701711",
-                "成都市\t837492457",
-                "绵阳市\t1004025987",
-                "达州市\t1009535558",
-                "德阳市\t1005857913",
-                "四川高校邦邦联合会\t318652734",
-                "四川大学-寺川大学桃园结义\t598806063",
-                "电子科技大学-邦邦同好会\t745318614",
-                "西南交通大学-2.5次元企划同好会\t1058757033",
-                "川北医学院-南充声豚集中地\t836493581",
-                "西南财经大学-财兵Dreamers Go\t626699647",
-                "成都理工大学-宝批龙邦\t709393017",
-                "西南石油大学-⭐西柚邦多利同好会⭐\t1032539210",
-                "四川师范大学-少女偶像企划同好会\t872387921",
-                "四川文理学院-少女乐队同好会\t961289644",
-                "成都锦城学院-锦城炸梦同好会\t1042205266",
-                "中国民用航空飞行学院-偶研部\t700829157",
-            ],
-            "贵州省": [
-                "★\t653588294"
-            ],
-            "云南省": [
-                "★\t743920899"
-            ],
-            "山西省": [
-                "★\t832320495",
-                "太原市\t778793458",
-                "阳泉市\t934750347"
-            ],
-            "北京市": [
-                "北京市①群\t754988287",
-                "北京市②群\t683102008",
-                "北京邦o\t628042511"
-            ],
-            "河北省": [
-                "河北BanG Dream同好会\t948567518",
-                "河北邦子✩邦多利同好会\t754791807",
-                "唐山市\t321257907",
-                "邯郸市\t891477952"
-            ],
-            "天津市": [
-                "★\t772313831"
-            ],
-            "山东省": [
-                "★\t342718094",
-                "济南市\t971596577",
-                "临沂市\t938607948",
-                "济宁市\t535389152",
-                "淄博市\t972571866",
-                "威海市\t362499023",
-                "潍坊市\t696482463",
-                "枣庄市\t696226842",
-                "日照市\t973371557",
-                "青州市\t286618511",
-                "滨州市\t978465767",
-                "青岛市\t531723696",
-                "泰安市\t514671214"
-            ],
-            "浙江省": [
-                "★\t139823813",
-                "温州市\t892472764",
-                "宁波市\t924801818",
-                "台州市\t398051024",
-                "绍兴市\t693974218",
-                "嘉兴市\t1029869170",
-                "湖州市\t1040258704"
-            ],
-            "安徽省": [
-                "合肥市\t747589088",
-                "芜湖市\t530588300",
-                "蚌埠市\t948203295",
-                "铜陵市\t102759097",
-                "宿州市\t891293813",
-                "马鞍山市\t661261951",
-                "蚌埠市\t948203295",
-                "宣城市\t172144394"
-            ],
-            "江苏省": [
-                "南京市①群\t819458412",
-                "南京市②群\t169906983",
-                "无锡市\t974271472",
-                "扬州市\t773559461",
-                "苏州市\t793780752",
-                "常州市\t583645455",
-                "徐州市\t905227285",
-                "南通市\t836206041",
-                "南京市\t747518591",
-                "盐城市\t145580593",
-                "宿迁市\t1011110279",
-                "泰州市\t247066554",
-                "泰州市兴化市\t580171783",
-                "镇江市\t1036159277",
-                "镇江市扬中市\t1046222995",
-                "淮安市\t1027430916",
-                "连云港市\t578503034"
-            ],
-            "上海市": [
-                "上海市①群\t522612554",
-                "上海市②群\t706299490",
-                "bfp\t813380802"
-            ],
-            "江西省": [
-                "南昌市\t894756390",
-                "吉安市\t978700466",
-                "赣州市\t971114413",
-                "宜春市\t1045951834",
-                "上饶市\t876909073",
-                "萍乡市\t949967318"
-            ],
-            "福建省": [
-                "福州市\t860717840",
-                "泉州市\t931808805",
-                "泉州市安溪县\t303701504",
-                "宁德市\t1006373621",
-                "厦门市\t761123677",
-                "漳州市\t163346070"
-            ],
-            "宁夏回族自治区": [
-                "★\t934398762"
-            ],
-            "甘肃省": [
-                "兰州市\t769808791"
-            ],
-            "内蒙古自治区": [
-                "★\t538294932"
-            ],
-            "香港特别行政区": [
-                "★\t937534090",
-                "★\t827288405"
-            ],
-            "澳门特别行政区": [
-                "★\t1025719485"
-            ],
-            "台湾省": [
-                "巴哈群\t应管理员要求暂不收录",
-                "天下第一邦\tdiscord群组：discord.gg/bestbandreamers"
-            ],
-            "海外": [
-                "北美洲\t北美炸梦同好会\t 958751334",
-                "北美洲\tBangdream北美中文抱团社团\t discord.gg/bandori01",
-                "亚洲\t日本BanG Dream频道群\t 753572532",
-                "澳洲\t澳大利亚微信群\t 群主微信: lhr0615",
 
-            ]
-        };
+            <script>
+                // 初始化ECharts
+                const myChart = echarts.init(document.getElementById('map'));
 
-        // 加载中国地图数据
-        fetch('mapdata.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // 注册中国地图
-                echarts.registerMap('china', data);
-
-                // 配置地图选项
-                const option = {
-                    title: {
-                        text: '点击省份下滑查看群号',
-                        subtext: '欢迎收藏转发分享本网站',
-                        left: 'center',
-                        textStyle: {
-                            fontSize: 20,
-                            fontWeight: 'bold'
-                        },
-                        subtextStyle: {
-                            fontSize: 14,
-                            color: '#666'
-                        }
-                    },
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: function (params) {
-                            return params.name;
-                        },
-                        backgroundColor: 'rgba(255,255,255,0.9)',
-                        borderColor: '#91d5ff',
-                        borderWidth: 1,
-                        textStyle: {
-                            color: '#333'
-                        }
-                    },
-                    visualMap: {
-                        show: false
-                    },
-                    series: [
-                        {
-                            name: '省份',
-                            type: 'map',
-                            map: 'china',
-                            roam: true,  // 允许缩放和平移
-                            zoom: 1.6,
-                            center: [105, 36],
-                            label: {
-                                show: true,
-                                fontSize: 15,
-                                color: '#333',
-                                fontWeight: 1300,
-                                formatter: function (params) {
-                                    let name = params.name;
-                                    // 去除特定后缀
-                                    name = name
-                                        .replace(/特别行政区$/, '')
-                                        .replace(/壮族自治区$/, '省')
-                                        .replace(/维吾尔自治区$/, '省')
-                                        .replace(/回族自治区$/, '省')
-                                        .replace(/自治区$/, '')
-                                    return name;
-                                }
-                            },
-                            itemStyle: {
-                                areaColor: '#fcb3c8',
-                                borderColor: '#e00052',
-                                borderWidth: 1.0
-                            },
-                            emphasis: {
-                                itemStyle: {
-                                    areaColor: '#e00052',
-                                    shadowBlur: 20,
-                                    shadowColor: 'rgba(0, 0, 0, 0.3)'
-                                },
-                                label: {
-                                    show: true,
-                                    color: '#fff',
-                                    fontSize: 12,
-                                    fontWeight: 35
-                                }
-                            }
-                        }
+                // 自定义省份城市数据
+                const provinceCities = {
+                    "辽宁省": [
+                        "★\t201554121",
+                        "沈阳市\t829012626",
+                        "大连市\t732833053"
                     ],
-                    graphic: [
-                        {
-                            type: 'group',
-                            left: '20px',
-                            top: '40px',
-                            name: 'btn-overseas',
+                    "吉林省": [
+                        "★\t170930018",
+                        "延边朝鲜族自治州\t615237635"
+                    ],
+                    "黑龙江省": [
+                        "★\t692973980"
+                    ],
+                    "广东省": [
+                        "广州市①群\t513069286",
+                        "广州市②群\t538334462",
+                        "广州市增城区\t913229647",
+                        "广州市越秀区\t1042451105",
+                        "广州邦o\t390485074",
+                        "深圳市\t934594049",
+                        "东莞市\t928106957",
+                        "阳江市\t685024751",
+                        "湛江市\t1091154609",
+                        "潮汕地区\t813803622",
+                        "珠海市\t940731770",
+                        "惠州市\t559784382",
+                        "江门市\t106377847",
+                        "江门市台山市\t1048336431",
+                        "佛山市\t1026918347",
+                        "佛山市顺德区\t808453663",
+                        "佛山市南海区\t787157262",
+                        "中山市\t994772024",
+                        "番禺市南沙区\t253622060",
+                        "茂名市\t604529419",
+                        "韶关市\t850285086",
+                        "肇庆市\t682071770",
+                        "河源市\t1047863785"
+                    ],
+                    "广西壮族自治区": [
+                        "★\t197263715",
+                        "南宁市\t912886747",
+                        "南宁邦o\t1049723846",
+                        "河池市\t1005617542",
+                        "柳州市\t958066206",
+                        "桂林市\t486534235",
+                        "梧州市\t813383545",
+                        "贵港市\t856329935",
+                        "百色市\t1039141082",
+                        "北部湾地区\t995632325",
+                        "崇左市\t1028745113",
+                        "玉林市\t1028745113"
+                    ],
+                    "海南省": [
+                        "★\t120854332"
+                    ],
+                    "河南省": [
+                        "★\t722752126"
+                    ],
+                    "湖北省": [
+                        "游戏群\t953865108",
+                        "武汉市\t933842046",
+                        "黄冈市\t942932442",
+                        "宜昌市\t833672595",
+                        "荆州市\t661586435",
+                        "荆门市\t761713177",
+                        "襄阳市\t534801131",
+                        "随州市\t992982589",
+                        "孝感市\t1039169038",
+                        "黄石市\t975881505"
+                    ],
+                    "湖南省": [
+                        "长沙市\t689865195",
+                        "湘潭市\t702817846",
+                        "衡阳市\t967279281",
+                        "岳阳市\t545071198"
+                    ],
+                    "青海省": [
+                        "★\t692015303"
+                    ],
+                    "新疆维吾尔自治区": [
+                        "★\t950051488"
+                    ],
+                    "陕西省": [
+                        "★\t626356375",
+                        "西安市\t689914087"
+                    ],
+                    "重庆市": [
+                        "西南联合群\t692833338",
+                        "①群\t926266398",
+                        "②群\t878533643"
+                    ],
+                    "四川省": [
+                        "★①\t828395737",
+                        "★②\t921701711",
+                        "成都市\t837492457",
+                        "绵阳市\t1004025987",
+                        "达州市\t1009535558",
+                        "德阳市\t1005857913",
+                        "四川高校邦邦联合会\t318652734",
+                        "四川大学-寺川大学桃园结义\t598806063",
+                        "电子科技大学-邦邦同好会\t745318614",
+                        "西南交通大学-2.5次元企划同好会\t1058757033",
+                        "川北医学院-南充声豚集中地\t836493581",
+                        "西南财经大学-财兵Dreamers Go\t626699647",
+                        "成都理工大学-宝批龙邦\t709393017",
+                        "西南石油大学-⭐西柚邦多利同好会⭐\t1032539210",
+                        "四川师范大学-少女偶像企划同好会\t872387921",
+                        "四川文理学院-少女乐队同好会\t961289644",
+                        "成都锦城学院-锦城炸梦同好会\t1042205266",
+                        "中国民用航空飞行学院-偶研部\t700829157",
+                    ],
+                    "贵州省": [
+                        "★\t653588294"
+                    ],
+                    "云南省": [
+                        "★\t743920899"
+                    ],
+                    "山西省": [
+                        "★\t832320495",
+                        "太原市\t778793458",
+                        "阳泉市\t934750347"
+                    ],
+                    "北京市": [
+                        "北京市①群\t754988287",
+                        "北京市②群\t683102008",
+                        "北京邦o\t628042511"
+                    ],
+                    "河北省": [
+                        "河北BanG Dream同好会\t948567518",
+                        "河北邦子✩邦多利同好会\t754791807",
+                        "唐山市\t321257907",
+                        "邯郸市\t891477952"
+                    ],
+                    "天津市": [
+                        "★\t772313831"
+                    ],
+                    "山东省": [
+                        "★\t342718094",
+                        "济南市\t971596577",
+                        "临沂市\t938607948",
+                        "济宁市\t535389152",
+                        "淄博市\t972571866",
+                        "威海市\t362499023",
+                        "潍坊市\t696482463",
+                        "枣庄市\t696226842",
+                        "日照市\t973371557",
+                        "青州市\t286618511",
+                        "滨州市\t978465767",
+                        "青岛市\t531723696",
+                        "泰安市\t514671214"
+                    ],
+                    "浙江省": [
+                        "★\t139823813",
+                        "温州市\t892472764",
+                        "宁波市\t924801818",
+                        "台州市\t398051024",
+                        "绍兴市\t693974218",
+                        "嘉兴市\t1029869170",
+                        "湖州市\t1040258704"
+                    ],
+                    "安徽省": [
+                        "合肥市\t747589088",
+                        "芜湖市\t530588300",
+                        "蚌埠市\t948203295",
+                        "铜陵市\t102759097",
+                        "宿州市\t891293813",
+                        "马鞍山市\t661261951",
+                        "蚌埠市\t948203295",
+                        "宣城市\t172144394"
+                    ],
+                    "江苏省": [
+                        "南京市①群\t819458412",
+                        "南京市②群\t169906983",
+                        "无锡市\t974271472",
+                        "扬州市\t773559461",
+                        "苏州市\t793780752",
+                        "常州市\t583645455",
+                        "徐州市\t905227285",
+                        "南通市\t836206041",
+                        "南京市\t747518591",
+                        "盐城市\t145580593",
+                        "宿迁市\t1011110279",
+                        "泰州市\t247066554",
+                        "泰州市兴化市\t580171783",
+                        "镇江市\t1036159277",
+                        "镇江市扬中市\t1046222995",
+                        "淮安市\t1027430916",
+                        "连云港市\t578503034"
+                    ],
+                    "上海市": [
+                        "上海市①群\t522612554",
+                        "上海市②群\t706299490",
+                        "bfp\t813380802"
+                    ],
+                    "江西省": [
+                        "南昌市\t894756390",
+                        "吉安市\t978700466",
+                        "赣州市\t971114413",
+                        "宜春市\t1045951834",
+                        "上饶市\t876909073",
+                        "萍乡市\t949967318"
+                    ],
+                    "福建省": [
+                        "福州市\t860717840",
+                        "泉州市\t931808805",
+                        "泉州市安溪县\t303701504",
+                        "宁德市\t1006373621",
+                        "厦门市\t761123677",
+                        "漳州市\t163346070"
+                    ],
+                    "宁夏回族自治区": [
+                        "★\t934398762"
+                    ],
+                    "甘肃省": [
+                        "兰州市\t769808791"
+                    ],
+                    "内蒙古自治区": [
+                        "★\t538294932"
+                    ],
+                    "香港特别行政区": [
+                        "★\t937534090",
+                        "★\t827288405"
+                    ],
+                    "澳门特别行政区": [
+                        "★\t1025719485"
+                    ],
+                    "台湾省": [
+                        "巴哈群\t应管理员要求暂不收录",
+                        "天下第一邦\tdiscord群组：discord.gg/bestbandreamers"
+                    ],
+                    "海外": [
+                        "北美洲\t北美炸梦同好会\t 958751334",
+                        "北美洲\tBangdream北美中文抱团社团\t discord.gg/bandori01",
+                        "亚洲\t日本BanG Dream频道群\t 753572532",
+                        "澳洲\t澳大利亚微信群\t 群主微信: lhr0615",
 
-                            children: [
-                                {
-                                    type: 'rect',
-                                    shape: {
-                                        width: 40,
-                                        height: 30,
-                                        r: 5,
-                                    },
-                                    style: {
-                                        fill: '#5470c6',
-                                    },
-                                    key: 'overseas-btn',
-                                    // 鼠标样式
-                                    cursor: 'pointer',
-
-                                },
-                                {
-                                    type: 'text',
-                                    style: {
-                                        text: '海外',
-                                        fontSize: 12,
-                                        fontWeight: 'bold',
-                                        fill: '#fff',
-                                        align: 'center',
-                                        verticalAlign: 'middle',
-                                        x: 20,
-                                        y: 15,
-                                        textAlign: 'center',
-                                        verticalAlign: 'middle'
-                                    },
-
-                                }
-                            ]
-                        }
                     ]
-
                 };
 
-                // 设置配置项
-                myChart.setOption(option);
+                // 加载中国地图数据
+                fetch('mapdata.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // 注册中国地图
+                        echarts.registerMap('china', data);
 
-                // 添加点击事件
-                // 封装：统一的信息面板更新函数
-                function updateInfoPanel(title, citiesList) {
-                    const infoPanel = document.getElementById('infoPanel');
-                    if (!infoPanel) return;
+                        // 配置地图选项
+                        const option = {
+                            title: {
+                                text: '点击省份下滑查看群号',
+                                subtext: '欢迎收藏转发分享本网站',
+                                left: 'center',
+                                textStyle: {
+                                    fontSize: 20,
+                                    fontWeight: 'bold'
+                                },
+                                subtextStyle: {
+                                    fontSize: 14,
+                                    color: '#666'
+                                }
+                            },
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: function (params) {
+                                    return params.name;
+                                },
+                                backgroundColor: 'rgba(255,255,255,0.9)',
+                                borderColor: '#91d5ff',
+                                borderWidth: 1,
+                                textStyle: {
+                                    color: '#333'
+                                }
+                            },
+                            visualMap: {
+                                show: false
+                            },
+                            series: [
+                                {
+                                    name: '省份',
+                                    type: 'map',
+                                    map: 'china',
+                                    roam: true,  // 允许缩放和平移
+                                    zoom: 1.6,
+                                    center: [105, 36],
+                                    label: {
+                                        show: true,
+                                        fontSize: 15,
+                                        color: '#333',
+                                        fontWeight: 1300,
+                                        formatter: function (params) {
+                                            let name = params.name;
+                                            // 去除特定后缀
+                                            name = name
+                                                .replace(/特别行政区$/, '')
+                                                .replace(/壮族自治区$/, '省')
+                                                .replace(/维吾尔自治区$/, '省')
+                                                .replace(/回族自治区$/, '省')
+                                                .replace(/自治区$/, '')
+                                            return name;
+                                        }
+                                    },
+                                    itemStyle: {
+                                        areaColor: '#fcb3c8',
+                                        borderColor: '#e00052',
+                                        borderWidth: 1.0
+                                    },
+                                    emphasis: {
+                                        itemStyle: {
+                                            areaColor: '#e00052',
+                                            shadowBlur: 20,
+                                            shadowColor: 'rgba(0, 0, 0, 0.3)'
+                                        },
+                                        label: {
+                                            show: true,
+                                            color: '#fff',
+                                            fontSize: 12,
+                                            fontWeight: 35
+                                        }
+                                    }
+                                }
+                            ],
+                            graphic: [
+                                {
+                                    type: 'group',
+                                    left: '20px',
+                                    top: '40px',
+                                    name: 'btn-overseas',
 
-                    const content = Array.isArray(citiesList) && citiesList.length > 0
-                        ? citiesList.map(city => `
+                                    children: [
+                                        {
+                                            type: 'rect',
+                                            shape: {
+                                                width: 40,
+                                                height: 30,
+                                                r: 5,
+                                            },
+                                            style: {
+                                                fill: '#5470c6',
+                                            },
+                                            key: 'overseas-btn',
+                                            // 鼠标样式
+                                            cursor: 'pointer',
+
+                                        },
+                                        {
+                                            type: 'text',
+                                            style: {
+                                                text: '海外',
+                                                fontSize: 12,
+                                                fontWeight: 'bold',
+                                                fill: '#fff',
+                                                align: 'center',
+                                                verticalAlign: 'middle',
+                                                x: 20,
+                                                y: 15,
+                                                textAlign: 'center',
+                                                verticalAlign: 'middle'
+                                            },
+
+                                        }
+                                    ]
+                                }
+                            ]
+
+                        };
+
+                        // 设置配置项
+                        myChart.setOption(option);
+
+                        // 添加点击事件
+                        // 封装：统一的信息面板更新函数
+                        function updateInfoPanel(title, citiesList) {
+                            const infoPanel = document.getElementById('infoPanel');
+                            if (!infoPanel) return;
+
+                            const content = Array.isArray(citiesList) && citiesList.length > 0
+                                ? citiesList.map(city => `
             <p style="
                 padding: 4px 12px;
                 border-radius: 4px;
@@ -481,50 +508,50 @@
                 white-space: normal;
             ">${city}</p>
           `).join('')
-                        : '<p style="color: #999; font-size: 18px;">暂无数据</p>';
+                                : '<p style="color: #999; font-size: 18px;">暂无数据</p>';
 
-                    infoPanel.innerHTML = `
+                            infoPanel.innerHTML = `
         <h1>${title}</h1>
         <h2><strong>下属列表：</strong></h2>
         <p style="margin-top: 10px;">
             ${content}
         </p>
     `;
-                }
+                        }
 
-                // ECharts 点击事件（优化后）
-                myChart.on('click', function (params) {
-                    // 情况1：点击的是“海外”按钮
-                    if (params.componentType === 'graphic') {
-                        const overseasData = provinceCities['海外'] || ['暂无海外数据'];
-                        updateInfoPanel('🌍 海外', overseasData);
-                        return;
-                    }
+                        // ECharts 点击事件（优化后）
+                        myChart.on('click', function (params) {
+                            // 情况1：点击的是“海外”按钮
+                            if (params.componentType === 'graphic') {
+                                const overseasData = provinceCities['海外'] || ['暂无海外数据'];
+                                updateInfoPanel('🌍 海外', overseasData);
+                                return;
+                            }
 
-                    // 情况2：点击的是地图上的省份
-                    const provinceName = params.name;
-                    const cities = provinceCities[provinceName] || ['暂无该省数据'];
+                            // 情况2：点击的是地图上的省份
+                            const provinceName = params.name;
+                            const cities = provinceCities[provinceName] || ['暂无该省数据'];
 
-                    // 使用统一函数更新面板
-                    updateInfoPanel(`📍 ${provinceName}`, cities);
-                });
+                            // 使用统一函数更新面板
+                            updateInfoPanel(`📍 ${provinceName}`, cities);
+                        });
 
-                // 添加加载完成提示
-                console.log('地图数据加载成功！按F12是想看什么？');
+                        // 添加加载完成提示
+                        console.log('地图数据加载成功！按F12是想看什么？');
 
-            })
-            .catch(error => {
-                console.error('⚠地图数据加载失败:', error);
-                document.getElementById('infoPanel').innerHTML =
-                    `<p style="color: red;">⚠地图数据加载失败：${error.message}</p>
+                    })
+                    .catch(error => {
+                        console.error('⚠地图数据加载失败:', error);
+                        document.getElementById('infoPanel').innerHTML =
+                            `<p style="color: red;">⚠地图数据加载失败：${error.message}</p>
                      <p>请检查网络连接或稍后重试。</p>`;
-            });
+                    });
 
-        // 处理窗口大小变化
-        window.addEventListener('resize', function () {
-            myChart.resize();
-        });
-    </script>
+                // 处理窗口大小变化
+                window.addEventListener('resize', function () {
+                    myChart.resize();
+                });
+            </script>
 </body>
 
 </html>
