@@ -7,8 +7,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
   <link rel="icon" href="/icon.png">
+  
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -27,24 +30,34 @@
 <meta name="twitter:card" content="summary_large_image">
   
   
+  
   <title>Blog EnlDM</title>
 
   <link  rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" />
 
 
 
+
+
 <!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
 
 
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
 
 
 <link  rel="stylesheet" href="/css/main.css" />
 
-<!-- 自定义样式保持在最底部 -->
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
 
   
 <link rel="stylesheet" href="/css/custom.css">
@@ -53,18 +66,31 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"enldm.cyou","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"enldm.cyou","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6811657951062049"
-     crossorigin="anonymous"></script>
-<meta name="generator" content="Hexo 6.0.0"></head>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
 
 
 <body>
-  <header style="height: 100vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 100vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
       <strong>EnlDM</strong>
@@ -85,9 +111,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/" target="_self">
                 <i class="iconfont icon-home-fill"></i>
-                首页
+                <span>首页</span>
               </a>
             </li>
           
@@ -97,9 +123,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/categories/" target="_self">
                 <i class="iconfont icon-category-fill"></i>
-                分类
+                <span>分类</span>
               </a>
             </li>
           
@@ -109,9 +135,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/about/" target="_self">
                 <i class="iconfont icon-user-fill"></i>
-                关于
+                <span>关于</span>
               </a>
             </li>
           
@@ -121,9 +147,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/links/">
+              <a class="nav-link" href="/links/" target="_self">
                 <i class="iconfont icon-link-fill"></i>
-                友链
+                <span>友链</span>
               </a>
             </li>
           
@@ -131,14 +157,16 @@
         
           <li class="nav-item" id="search-btn">
             <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+              <i class="iconfont icon-search"></i>
             </a>
           </li>
+          
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
           </li>
         
       </ul>
@@ -146,58 +174,65 @@
   </div>
 </nav>
 
-    <div class="banner" id="banner" parallax=true
-         style="background: url('https://bestdori.com/assets/cn/characters/resourceset/res003052_rip/card_normal.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Glad to see you">
-              
-            </span>
+  
 
-            
-          </div>
-
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://bestdori.com/assets/cn/characters/resourceset/res003052_rip/card_normal.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
           
-            <div class="scroll-down-bar">
-              <i class="iconfont icon-arrowdown"></i>
-            </div>
+            <span id="subtitle" data-typed-text="Glad to see you"></span>
           
         </div>
+
+        
       </div>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
     </div>
+  </div>
+</div>
+
+</div>
+
   </header>
 
   <main>
     
       <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          style=margin-top:0>
+        <div id="board"
+          style="margin-top: 0">
           
           <div class="container">
             <div class="row">
               <div class="col-12 col-md-10 m-auto">
                 
 
+<h1 style="display: none">Blog EnlDM</h1>
 
   <div class="row mx-auto index-card">
     
     
     <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/2024/01/Personal_Battlefield_status/" target="_self">
           Personal Battlefield status
         </a>
-      </h1>
+      </h2>
 
-      <p class="index-excerpt">
-        <a href="/2024/01/Personal_Battlefield_status/" target="_self">
-          
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2024/01/Personal_Battlefield_status/" target="_self">
+        <div>
           如果加载不出请尝试更换网络(由gametools提供支持) Battlefield V   Battlefield 1   Battlefield 2042  IP test by SKKMOE
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -213,9 +248,9 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%88%98%E5%9C%B0/">战地</a>
+              <a href="/tags/%E6%88%98%E5%9C%B0/">#战地</a>
             
-              <a href="/tags/IP-test/">IP test</a>
+              <a href="/tags/IP-test/">#IP test</a>
             
           </div>
         
@@ -227,19 +262,19 @@
     
     
     <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/2023/07/%E5%85%B4%E4%B8%9A%E9%93%B6%E8%A1%8C%E7%BE%8E%E8%BF%90%E5%80%9F%E8%AE%B0%E5%8D%A1%E7%AE%80%E8%AF%84/" target="_self">
           兴业银行美运借记卡简评
         </a>
-      </h1>
+      </h2>
 
-      <p class="index-excerpt">
-        <a href="/2023/07/%E5%85%B4%E4%B8%9A%E9%93%B6%E8%A1%8C%E7%BE%8E%E8%BF%90%E5%80%9F%E8%AE%B0%E5%8D%A1%E7%AE%80%E8%AF%84/" target="_self">
-          
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/%E5%85%B4%E4%B8%9A%E9%93%B6%E8%A1%8C%E7%BE%8E%E8%BF%90%E5%80%9F%E8%AE%B0%E5%8D%A1%E7%AE%80%E8%AF%84/" target="_self">
+        <div>
           还行，但是作用有限
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -255,7 +290,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E8%AF%84%E6%B5%8B/">评测</a>
+              <a href="/tags/%E8%AF%84%E6%B5%8B/">#评测</a>
             
           </div>
         
@@ -267,19 +302,19 @@
     
     
     <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/2023/02/%E9%9D%92%E9%BE%99%E9%9D%A2%E6%9D%BF%E5%88%B7%E4%BA%AC%E8%B1%86/" target="_self">
           青龙面板刷京豆
         </a>
-      </h1>
+      </h2>
 
-      <p class="index-excerpt">
-        <a href="/2023/02/%E9%9D%92%E9%BE%99%E9%9D%A2%E6%9D%BF%E5%88%B7%E4%BA%AC%E8%B1%86/" target="_self">
-          
-          本文以docker部署为教程，其余教程参考 https:&#x2F;&#x2F;hub.docker.com&#x2F;r&#x2F;whyour&#x2F;qinglong 一：拉取镜像拉取whyour的镜像  docker pull whyour&#x2F;qinglong  二：部署镜像docker run -dit   -v $PWD&#x2F;ql:&#x2F;ql&#x2F;data   -p 5700:5700   --name qinglong   --hostname
-        </a>
-      </p>
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/02/%E9%9D%92%E9%BE%99%E9%9D%A2%E6%9D%BF%E5%88%B7%E4%BA%AC%E8%B1%86/" target="_self">
+        <div>
+          本文以docker部署为教程，其余教程参考 https://hub.docker.com/r/whyour/qinglong 一：拉取镜像拉取whyour的镜像  docker pull whyour/qinglong  二：部署镜像docker run -dit   -v $PWD/ql:/ql/data   -p 5700:5700   --name qinglong   --hostname
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -295,7 +330,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>
+              <a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>
             
           </div>
         
@@ -307,19 +342,19 @@
     
     
     <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/2023/02/%E4%B8%80%E7%82%B9%E5%B8%B8%E7%94%A8Linux%E5%91%BD%E4%BB%A4/" target="_self">
           一点常用Linux命令
         </a>
-      </h1>
+      </h2>
 
-      <p class="index-excerpt">
-        <a href="/2023/02/%E4%B8%80%E7%82%B9%E5%B8%B8%E7%94%A8Linux%E5%91%BD%E4%BB%A4/" target="_self">
-          
-          VIM参考文章:   https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;68111471  https:&#x2F;&#x2F;www.bilibili.com&#x2F;read&#x2F;cv18082540&#x2F;  简要介绍：  正常模式 (Normal-mode) 插入模式 (Insert-mode) 命令模式 (Command-mode) 可视模式 (Visual-mode)  Screen参考文章:  https:&#x2F;&#x2F;b
-        </a>
-      </p>
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/02/%E4%B8%80%E7%82%B9%E5%B8%B8%E7%94%A8Linux%E5%91%BD%E4%BB%A4/" target="_self">
+        <div>
+          VIM参考文章:   https://zhuanlan.zhihu.com/p/68111471  https://www.bilibili.com/read/cv18082540/  简要介绍：  正常模式 (Normal-mode) 插入模式 (Insert-mode) 命令模式 (Command-mode) 可视模式 (Visual-mode)  Screen参考文章:  https://b
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -335,7 +370,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>
+              <a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>
             
           </div>
         
@@ -347,19 +382,19 @@
     
     
     <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/2023/02/OMV/" target="_self">
           OMV
         </a>
-      </h1>
+      </h2>
 
-      <p class="index-excerpt">
-        <a href="/2023/02/OMV/" target="_self">
-          
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/02/OMV/" target="_self">
+        <div>
           因为太懒鬼了，本文几乎没有截图 (懒得在电脑上插采集卡) 各位读者脑补就好 零：前言搞一台NAS，我的脑子里只有黑群晖和威联通。在2022暑假弄得一台J1900之后，参考B站这篇教程，成功装上了黑群晖。但是到一月的时候，Docker版Qinglong Tools经常性的出现不能拉拉取仓库，表面上是网络问题，排查了半天应该是别的地方有什么毛病。干脆重装一下黑裙，工具和镜像都在，然后灾难出现了 在进入
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -375,7 +410,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>
+              <a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>
             
           </div>
         
@@ -387,19 +422,19 @@
     
     
     <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/2023/02/%E6%8D%A2%E4%B8%AA%E5%9B%BE%E5%BA%8A%EF%BC%9F%E7%AE%97%E4%BA%86/" target="_self">
           换个图床？算了
         </a>
-      </h1>
+      </h2>
 
-      <p class="index-excerpt">
-        <a href="/2023/02/%E6%8D%A2%E4%B8%AA%E5%9B%BE%E5%BA%8A%EF%BC%9F%E7%AE%97%E4%BA%86/" target="_self">
-          
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/02/%E6%8D%A2%E4%B8%AA%E5%9B%BE%E5%BA%8A%EF%BC%9F%E7%AE%97%E4%BA%86/" target="_self">
+        <div>
           SM.MSSM.MS 图层在好几年前就被大量用户采用，而在2022年末，主域名sm.ms被干扰。现在打开则是超时(ERR_CONNECTION_TIMED_OUT)或者链接重置(ERR_CONNECTION_RESET). 而图片资源域名s2.loli.net则可以正常打开不受影响。点开后发现其主域名更换为了smms.app POSTIMAGE POSTIMAGE是本Blog正在使用的图床，个人感
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -415,7 +450,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>
+              <a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>
             
           </div>
         
@@ -427,19 +462,19 @@
     
     
     <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/2022/04/%E5%A6%82%E4%BD%95%E6%97%A0%E7%BA%BFadb/" target="_self">
           如何无线adb
         </a>
-      </h1>
+      </h2>
 
-      <p class="index-excerpt">
-        <a href="/2022/04/%E5%A6%82%E4%BD%95%E6%97%A0%E7%BA%BFadb/" target="_self">
-          
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/04/%E5%A6%82%E4%BD%95%E6%97%A0%E7%BA%BFadb/" target="_self">
+        <div>
           其实关键就在于两个步骤
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -455,11 +490,11 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>
+              <a href="/tags/%E6%95%99%E7%A8%8B/">#教程</a>
             
-              <a href="/tags/Android/">Android</a>
+              <a href="/tags/Android/">#Android</a>
             
-              <a href="/tags/ADB/">ADB</a>
+              <a href="/tags/ADB/">#ADB</a>
             
           </div>
         
@@ -471,19 +506,19 @@
     
     
     <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/2022/03/Arknights_tools/" target="_self">
           Arknights_tools
         </a>
-      </h1>
+      </h2>
 
-      <p class="index-excerpt">
-        <a href="/2022/03/Arknights_tools/" target="_self">
-          
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/03/Arknights_tools/" target="_self">
+        <div>
           我都退坑了啊那没事了
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -499,7 +534,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F/">明日方舟</a>
+              <a href="/tags/%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F/">#明日方舟</a>
             
           </div>
         
@@ -511,19 +546,19 @@
     
     
     <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/2022/03/%E5%85%B3%E4%BA%8Emarkdown/" target="_self">
           关于Markdown
         </a>
-      </h1>
+      </h2>
 
-      <p class="index-excerpt">
-        <a href="/2022/03/%E5%85%B3%E4%BA%8Emarkdown/" target="_self">
-          
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/03/%E5%85%B3%E4%BA%8Emarkdown/" target="_self">
+        <div>
           从别处偷的自己整理了一下常见markdown
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -539,7 +574,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E9%AA%91%E8%A1%8C/">骑行</a>
+              <a href="/tags/%E9%AA%91%E8%A1%8C/">#骑行</a>
             
           </div>
         
@@ -551,19 +586,19 @@
     
     
     <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
+      <h2 class="index-header">
         
         <a href="/2022/03/hello_first_post/" target="_self">
           hello_first_post
         </a>
-      </h1>
+      </h2>
 
-      <p class="index-excerpt">
-        <a href="/2022/03/hello_first_post/" target="_self">
-          
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2022/03/hello_first_post/" target="_self">
+        <div>
           重建Blog后-2022经过两三天的折腾，终于重见天日。由于原有VPS的内存不足、Let’s encrypt续签失败、域名到期等诸多问题，最终还是选择了hexo部署在Github pages上的方法。相比于在VPS上折腾LNMP，确实非常快捷方便，同时也比较省心。 原有的 enldm.me 已更换为 enldm.cyou ，续费更便宜能用就行。但有时候可能会遇到Github pages被阻断也是没
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -579,7 +614,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%97%A5%E5%B8%B8/">日常</a>
+              <a href="/tags/%E6%97%A5%E5%B8%B8/">#日常</a>
             
           </div>
         
@@ -624,14 +659,14 @@
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
+
     
 
     
@@ -644,19 +679,20 @@
     
   </main>
 
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-  </div>
+  <footer>
+    <div class="footer-inner">
   
-
+    <div class="footer-content">
+       <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
   
-
   
-</footer>
+  
+</div>
 
+  </footer>
 
-  <!-- SCRIPTS -->
+  <!-- Scripts -->
   
   <script  src="https://cdn.bootcdn.net/ajax/libs/nprogress/0.2.0/nprogress.min.js" ></script>
   <link  rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/nprogress/0.2.0/nprogress.min.css" />
@@ -675,10 +711,22 @@
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-<!-- Plugins -->
 
+  <script  src="https://cdn.bootcdn.net/ajax/libs/typed.js/2.0.0/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
 
-  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -688,35 +736,8 @@
 
 
 
-  
 
-
-
-
-
-
-
-
-  <script  src="https://cdn.bootcdn.net/ajax/libs/typed.js/2.0.0/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-        typing(title);
-      
-    })(window, document);
-  </script>
-
-
-
-
-
-
-
-
-
-
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -726,9 +747,15 @@
 
 
 
-<!-- 主题的启动项 保持在最底部 -->
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
 <script  src="/js/boot.js" ></script>
 
 
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 </body>
 </html>
