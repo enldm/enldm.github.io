@@ -27,7 +27,7 @@
 <meta property="og:description" content="Ubuntu VPS 手动分配 iPv6 并启用 适用场景：VPS 被分配一个 &#x2F;64 IPv6 子网（如 2001:db8:abcd:1234::&#x2F;64），但系统未自动配置全局地址，需手动启用并设置正确网关（如 2001:db8:abcd::1）。   ✅ 一、最终成功配置步骤步骤 1：确认基本信息123456# 查看当前 IPv6 地址ip -6 addr show# 确认分配的子网（例如）#">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-10T15:47:27.000Z">
-<meta property="article:modified_time" content="2025-12-10T15:49:38.557Z">
+<meta property="article:modified_time" content="2025-12-10T15:50:47.474Z">
 <meta property="article:author" content="ENLDM">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -214,7 +214,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.5k 字
+          2.4k 字
         
       </span>
     
@@ -225,7 +225,7 @@
         
         
         
-          21 分钟
+          20 分钟
         
       </span>
     
@@ -389,15 +389,11 @@
 </tr>
 </tbody></table>
 <blockquote>
-<p>💡 <strong>经验之谈</strong>：VPS 的 IPv6 配置失败，90% 是因为 <strong>网关路由未正确设置</strong>，10% 是 YAML 格式问题。只要掌握 <code>on-link: true</code> + 纯净配置，即可一劳永逸。</p>
+<p>💡 <strong>经验之谈</strong>：VPS 的 IPv6 配置失败，90% 是因为 <strong>网关路由未正确设置</strong>，10% 是 YAML 格式问题。只要掌握 <code>on-link: true</code> + 纯净配置，即可一劳永逸。经过实测确实是配置格式的问题。</p>
 </blockquote>
 <hr>
 <p>✅ 现在你的 Ubuntu VPS 已全面支持 IPv6，可放心部署双栈服务！</p>
 <hr>
-<h3 id="🔒-隐私说明"><a href="#🔒-隐私说明" class="headerlink" title="🔒 隐私说明"></a>🔒 隐私说明</h3><ul>
-<li>所有 IPv6 地址均使用 <strong><code>2001:db8::/32</code></strong> 范围（<a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/html/rfc3849">RFC 3849</a>），专用于文档和示例，<strong>不会在公网路由</strong>。</li>
-<li>真实测试命令（如 <code>ping6 2001:4860::8844</code>）保留，因其为公共 DNS，不影响隐私。</li>
-</ul>
 
                 
               </div>
