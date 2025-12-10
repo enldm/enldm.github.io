@@ -27,7 +27,7 @@
 <meta property="og:description" content="其实关键就在于两个步骤">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-04-18T06:16:30.000Z">
-<meta property="article:modified_time" content="2024-03-22T04:27:00.271Z">
+<meta property="article:modified_time" content="2025-12-10T15:42:51.687Z">
 <meta property="article:author" content="ENLDM">
 <meta property="article:tag" content="ADB">
 <meta property="article:tag" content="Android">
@@ -217,7 +217,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1k 字
+          985 字
         
       </span>
     
@@ -270,64 +270,52 @@
             
               <div class="markdown-body">
                 
-                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>为了使用前文所提到的<a target="_blank" rel="noopener" href="https://github.com/ArknightsAutoHelper/ArknightsAutoHelper">ArknightsAutoHelper</a>，而不占用电脑资源的情况下（指不使用模拟器），尝试使用无线adb连接到手机</p>
-<p>什么是adb？全称为Android Debug Bridge，字面意思即调试安卓设备的桥梁</p>
-<h1 id="尝试"><a href="#尝试" class="headerlink" title="尝试"></a>尝试</h1><ol start="0">
-<li><p>首先确保没有其他应用（例如：xx手机助手）占用adb端口，以及手机已经支持无线adb</p>
-</li>
-<li><p>在Android手机上打开：开发人员选项-&gt;USB调试-&gt;无线调试</p>
-</li>
-</ol>
-<p>（不同设备的步骤可能不同，本文以MIUI为例，则需要多次点击MIUI版本号打开开发人员选项）</p>
-<ol start="2">
-<li><p>进入无线调试界面，得到IP与端口，以 192.168.1.100:2345 为例</p>
-</li>
-<li><p>在电脑上尝试用adb连接</p>
-</li>
-</ol>
-<p>输入</p>
-<pre><code class="hljs">adb connect 192.168.1.100:2345
-</code></pre>
-<p>得到</p>
-<pre><code class="hljs">adb server version (41) doesn&#39;t match this client (31)
-</code></pre>
-<p>手机上的adb版本号为1.0.41，高于电脑上的adb版本1.0.31，更新电脑上的adb即可</p>
-<p>再次输入 </p>
-<pre><code class="hljs">adb connect 192.168.1.100:2345
-</code></pre>
-<p>得到</p>
-<pre><code class="hljs">* daemon not running; starting now at tcp:5037
-* daemon started successfully
-failed to connect to 192.168.0.6:38697
-</code></pre>
-<p>为什么无法连接？用USB直捅电脑又没有问题。这时我才注意到了界面有「使用配对码配对装置」，点击后显示「WLAN配对码与IP地址端口」。</p>
-<p>原来是要先配对，怪不得下面的已配对的设备显示为空</p>
-<p>查看adb帮助 </p>
-<pre><code class="hljs">adb pair HOST[:PORT] [PAIRING CODE]
-// adb pair IP:端口 配对码 
-// 这里的「配对端口与配对码」与「adb调试端口」是不同的，均由Android给出
-</code></pre>
-<p>开始配对</p>
-<pre><code class="hljs">adb pair 192.168.1.100:8848 522788
-</code></pre>
-<p>出现</p>
-<pre><code class="hljs">Successfully paired to 192.168.1.100:8848 [guid=adb-********-******]
-</code></pre>
-<p>此时手机上出现已配对的设备及电脑用户名</p>
-<p>再次连接</p>
-<pre><code class="hljs">adb connect 192.168.1.100:2345
-</code></pre>
-<p>已连接</p>
-<pre><code class="hljs">connected to 192.168.1.100:2345
-</code></pre>
-<p>查看当前设备</p>
-<pre><code class="hljs">adb devices
-</code></pre>
-<p>返回如下状态</p>
-<pre><code class="hljs">List of devices attached
-192.168.1.100:2345      device
-</code></pre>
-<p>状态为device即为连接成功，以后刷机也可以不需要数据线了</p>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>为了使用 <a target="_blank" rel="noopener" href="https://github.com/ArknightsAutoHelper/ArknightsAutoHelper">ArknightsAutoHelper</a> 这类自动化工具，并避免占用电脑资源（例如不使用模拟器），我们可以尝试通过无线 ADB 连接到手机。</p>
+<p><strong>什么是 ADB？</strong><br>ADB 全称 Android Debug Bridge，即安卓调试桥，是一个用于连接和调试安卓设备的命令行工具。</p>
+<h1 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h1><h2 id="0-准备工作"><a href="#0-准备工作" class="headerlink" title="0. 准备工作"></a>0. 准备工作</h2><ul>
+<li>确保没有其他应用（如手机助手等）占用 ADB 端口。</li>
+<li>确认手机已支持无线 ADB 调试功能。</li>
+</ul>
+<h2 id="1-开启手机无线调试"><a href="#1-开启手机无线调试" class="headerlink" title="1. 开启手机无线调试"></a>1. 开启手机无线调试</h2><ul>
+<li>进入手机「设置」→「关于手机」，多次点击「版本号」以开启<strong>开发者选项</strong>。</li>
+<li>返回设置，进入「开发者选项」→「USB 调试」，将其开启。</li>
+<li>进入「无线调试」或类似选项，并启用它。<br><em>（不同品牌手机路径可能略有差异，本文以 MIUI 为例）</em></li>
+</ul>
+<h2 id="2-获取连接信息"><a href="#2-获取连接信息" class="headerlink" title="2. 获取连接信息"></a>2. 获取连接信息</h2><ul>
+<li>在无线调试界面中，可以看到 IP 地址和端口，例如：<br><code>192.168.1.100:2345</code><br><em>（这是用于后续 ADB 连接的端口）</em></li>
+</ul>
+<h2 id="3-配对与连接"><a href="#3-配对与连接" class="headerlink" title="3. 配对与连接"></a>3. 配对与连接</h2><h3 id="3-1-检查-ADB-版本"><a href="#3-1-检查-ADB-版本" class="headerlink" title="3.1 检查 ADB 版本"></a>3.1 检查 ADB 版本</h3><p>在电脑命令行输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">adb connect 192.168.1.100:2345<br></code></pre></td></tr></table></figure>
+
+<p>如果出现类似以下错误：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs lisp">adb server version (<span class="hljs-number">41</span>) doesn&#x27;t match this client (<span class="hljs-number">31</span>)<br></code></pre></td></tr></table></figure>
+
+<p>说明电脑端的 ADB 版本过旧，请更新至与手机端匹配的版本。</p>
+<h3 id="3-2-使用配对码配对"><a href="#3-2-使用配对码配对" class="headerlink" title="3.2 使用配对码配对"></a>3.2 使用配对码配对</h3><p>无线调试界面通常会提供<strong>配对码配对</strong>选项，点击后获取「配对 IP:端口」与「配对码」。例如：</p>
+<ul>
+<li>配对地址：<code>192.168.1.100:8848</code></li>
+<li>配对码：<code>522788</code></li>
+</ul>
+<p>在电脑命令行输入配对命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">adb pair 192.168.1.100:8848 522788<br></code></pre></td></tr></table></figure>
+
+<p>成功后会显示：</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc">Successfully paired to 192.168.1.100:8848 [guid=adb-<span class="hljs-strong">*****</span><span class="hljs-strong">***-**</span><span class="hljs-strong">***</span>*]<br></code></pre></td></tr></table></figure>
+
+<p>此时手机上会显示已配对的电脑设备名称。</p>
+<h3 id="3-3-连接调试端口"><a href="#3-3-连接调试端口" class="headerlink" title="3.3 连接调试端口"></a>3.3 连接调试端口</h3><p>配对成功后，再使用之前获取的调试端口进行连接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">adb connect 192.168.1.100:2345<br></code></pre></td></tr></table></figure>
+
+<p>连接成功提示：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">connected</span> to <span class="hljs-number">192.168.1.100:2345</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="4-验证连接"><a href="#4-验证连接" class="headerlink" title="4. 验证连接"></a>4. 验证连接</h2><p>输入以下命令查看设备列表：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">adb devices<br></code></pre></td></tr></table></figure>
+
+<p>若显示设备状态为 <code>device</code>，则表示连接成功：</p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs accesslog">List of devices attached<br><span class="hljs-number">192.168.1.100:2345</span>      device<br></code></pre></td></tr></table></figure>
+
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>通过以上步骤，即可实现无线 ADB 连接，后续进行调试、自动化操作甚至刷机都无需再使用数据线，更加方便灵活。</p>
 
                 
               </div>
