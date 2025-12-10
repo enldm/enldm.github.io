@@ -1,0 +1,792 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ENLDM">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="从 Proxmox VE 迁移 Windows 11 虚拟机到物理机 适用场景：使用 Proxmox VE 运行 Windows 11 虚拟机，现在希望彻底弃用 PVE，将 Win11 直接作为宿主机系统运行，并保留原有数据盘内容。   🧩 环境说明 磁盘 A（&#x2F;dev&#x2F;sda）：512GB SSD 安装了 Proxmox VE 系统（基于 LVM） 所有虚拟机（包括 Win11 和 Ubunt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从 Proxmox VE 迁移 Windows 11 虚拟机到物理机">
+<meta property="og:url" content="https://enldm.cyou/2025/12/%E4%BB%8EProxmox%20VE%20%E8%BF%81%E7%A7%BB%20Windows%2011%20%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%88%B0%E7%89%A9%E7%90%86%E6%9C%BA/">
+<meta property="og:site_name" content="Blog EnlDM">
+<meta property="og:description" content="从 Proxmox VE 迁移 Windows 11 虚拟机到物理机 适用场景：使用 Proxmox VE 运行 Windows 11 虚拟机，现在希望彻底弃用 PVE，将 Win11 直接作为宿主机系统运行，并保留原有数据盘内容。   🧩 环境说明 磁盘 A（&#x2F;dev&#x2F;sda）：512GB SSD 安装了 Proxmox VE 系统（基于 LVM） 所有虚拟机（包括 Win11 和 Ubunt">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-10T15:36:49.000Z">
+<meta property="article:modified_time" content="2025-12-10T15:37:25.082Z">
+<meta property="article:author" content="ENLDM">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>从 Proxmox VE 迁移 Windows 11 虚拟机到物理机 - Blog EnlDM</title>
+
+  <link  rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"enldm.cyou","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>EnlDM</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://bestdori.com/assets/cn/characters/resourceset/res003052_rip/card_normal.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="从 Proxmox VE 迁移 Windows 11 虚拟机到物理机"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-12-10 23:36" pubdate>
+          2025年12月10日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          25 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">从 Proxmox VE 迁移 Windows 11 虚拟机到物理机</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="从-Proxmox-VE-迁移-Windows-11-虚拟机到物理机"><a href="#从-Proxmox-VE-迁移-Windows-11-虚拟机到物理机" class="headerlink" title="从 Proxmox VE 迁移 Windows 11 虚拟机到物理机"></a>从 Proxmox VE 迁移 Windows 11 虚拟机到物理机</h1><blockquote>
+<p><strong>适用场景</strong>：使用 Proxmox VE 运行 Windows 11 虚拟机，现在希望彻底弃用 PVE，将 Win11 直接作为宿主机系统运行，并保留原有数据盘内容。</p>
+</blockquote>
+<hr>
+<h2 id="🧩-环境说明"><a href="#🧩-环境说明" class="headerlink" title="🧩 环境说明"></a>🧩 环境说明</h2><ul>
+<li><strong>磁盘 A（<code>/dev/sda</code>）</strong>：512GB SSD<ul>
+<li>安装了 Proxmox VE 系统（基于 LVM）</li>
+<li>所有虚拟机（包括 Win11 和 Ubuntu）的磁盘文件都存储在此盘的 LVM 卷中</li>
+</ul>
+</li>
+<li><strong>磁盘 B（<code>/dev/sdb</code>）</strong>：4TB HDD<ul>
+<li>作为 LVM 物理卷（PV），挂载为 Ubuntu 虚拟机的数据盘，存有重要用户文件</li>
+</ul>
+</li>
+<li><strong>磁盘 C（<code>/dev/sdc</code>）</strong>：3TB HDD<ul>
+<li>同样是 LVM PV，但<strong>当前为空</strong>，计划用作临时中转盘</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>💡 目标：</p>
+<ol>
+<li>将 PVE 中的 <strong>Win11 虚拟机</strong>迁移到 <code>/dev/sda</code>，使其成为可直接启动的物理系统</li>
+<li>保留 <code>/dev/sdb</code> 上的所有数据</li>
+<li>最终将 <code>/dev/sdb</code> 格式化为 NTFS，供 Win11 使用</li>
+<li>利用 <code>/dev/sdc</code> 作为临时备份盘（格式化为 NTFS）</li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="⚠️-重要前提"><a href="#⚠️-重要前提" class="headerlink" title="⚠️ 重要前提"></a>⚠️ 重要前提</h2><ul>
+<li><strong>所有操作必须在 PVE 系统仍在运行时完成</strong>——一旦覆盖 <code>/dev/sda</code>，PVE 将永久消失。</li>
+<li><strong>务必提前备份关键数据</strong>！本文虽力求安全，但磁盘操作有风险。</li>
+<li>建议准备：<ul>
+<li>Clonezilla Live USB（用于镜像写入）</li>
+<li>Windows 11 安装 U 盘（用于引导修复）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="✅-完整操作步骤"><a href="#✅-完整操作步骤" class="headerlink" title="✅ 完整操作步骤"></a>✅ 完整操作步骤</h2><h3 id="步骤-1：关闭-Win11-虚拟机"><a href="#步骤-1：关闭-Win11-虚拟机" class="headerlink" title="步骤 1：关闭 Win11 虚拟机"></a>步骤 1：关闭 Win11 虚拟机</h3><p>在 PVE Web UI 或终端中关闭目标虚拟机（假设 VM ID &#x3D; <code>100</code>）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">qm stop 100<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="步骤-2：释放-C-盘（-dev-sdc）为裸盘并格式化为-NTFS"><a href="#步骤-2：释放-C-盘（-dev-sdc）为裸盘并格式化为-NTFS" class="headerlink" title="步骤 2：释放 C 盘（/dev/sdc）为裸盘并格式化为 NTFS"></a>步骤 2：释放 C 盘（<code>/dev/sdc</code>）为裸盘并格式化为 NTFS</h3><p>C 盘当前是空的 LVM PV，需先清除 LVM 元数据，再格式化为 NTFS 以便 Windows 识别。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 清除 LVM 标记</span><br><span class="hljs-built_in">sudo</span> pvremove /dev/sdc<br><span class="hljs-built_in">sudo</span> wipefs -a /dev/sdc<br><br><span class="hljs-comment"># 可选：清空前 100MB 防止残留</span><br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/zero of=/dev/sdc bs=1M count=100<br><br><span class="hljs-comment"># 安装 parted 工具</span><br><br><span class="hljs-comment"># 创建 GPT 分区表 + 单一分区</span><br><span class="hljs-built_in">sudo</span> parted /dev/sdc mklabel gpt<br><span class="hljs-built_in">sudo</span> parted /dev/sdc mkpart primary ntfs 0% 100%<br><br><span class="hljs-comment"># 格式化为 NTFS（需安装 ntfs-3g）</span><br><span class="hljs-built_in">sudo</span> apt install ntfs-3g -y<br><span class="hljs-built_in">sudo</span> mkfs.ntfs -f /dev/sdc1<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>✅ 此时 <code>/dev/sdc1</code> 是一个标准 NTFS 分区，Windows 可直接读写。</p>
+</blockquote>
+<hr>
+<h3 id="步骤-3：挂载-C-盘并备份-B-盘数据"><a href="#步骤-3：挂载-C-盘并备份-B-盘数据" class="headerlink" title="步骤 3：挂载 C 盘并备份 B 盘数据"></a>步骤 3：挂载 C 盘并备份 B 盘数据</h3><h4 id="激活-B-盘的-LVM-并挂载"><a href="#激活-B-盘的-LVM-并挂载" class="headerlink" title="激活 B 盘的 LVM 并挂载"></a>激活 B 盘的 LVM 并挂载</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 扫描并激活卷组（假设 VG 名为 vg_data）</span><br><span class="hljs-built_in">sudo</span> vgscan<br><span class="hljs-built_in">sudo</span> vgchange -ay vg_data<br><br><span class="hljs-comment"># 挂载逻辑卷（假设 LV 为 lv_b）</span><br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">mkdir</span> -p /mnt/b_data<br><span class="hljs-built_in">sudo</span> mount /dev/vg_data/lv_b /mnt/b_data<br></code></pre></td></tr></table></figure>
+
+<h4 id="挂载-C-盘并复制数据"><a href="#挂载-C-盘并复制数据" class="headerlink" title="挂载 C 盘并复制数据"></a>挂载 C 盘并复制数据</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">mkdir</span> -p /mnt/c_backup<br><span class="hljs-built_in">sudo</span> mount /dev/sdc1 /mnt/c_backup<br><br><span class="hljs-comment"># 使用 rsync 复制所有文件</span><br>rsync -avh --progress /mnt/b_data/. /mnt/c_backup/<br><br><span class="hljs-comment"># 验证</span><br><span class="hljs-built_in">ls</span> /mnt/c_backup/<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>💡 使用 <code>cp -a</code> 可保留符号链接、时间戳等，比 <code>rsync</code> 更适合跨文件系统备份。</p>
+</blockquote>
+<p>完成后卸载：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> umount /mnt/b_data /mnt/c_backup<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="步骤-4：导出-Win11-虚拟磁盘为-RAW-镜像"><a href="#步骤-4：导出-Win11-虚拟磁盘为-RAW-镜像" class="headerlink" title="步骤 4：导出 Win11 虚拟磁盘为 RAW 镜像"></a>步骤 4：导出 Win11 虚拟磁盘为 RAW 镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">1. 找到快照对应的磁盘路径<br><br><span class="hljs-comment"># 列出虚拟机磁盘</span><br>qm config 100<br><br>📊 磁盘配置分析<br>磁盘	用途	大小	必须导出？<br>virtio0 = vm-100-disk-2	Windows 主系统盘（C: 盘）	300 GB	必须导出<br>efidisk0 = vm-100-disk-0	UEFI 引导分区	4 MB	建议导出（引导用，不导出的需要自己划分一个100M的分区在硬盘头部，然后恢复，则可跳过步骤6）<br>tpmstate0 = vm-100-disk-1	TPM 虚拟芯片状态	4 MB	无需导出（物理机不需要）<br><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>🔔 注意：确保 <code>/tmp</code> 有足够空间（或改用其他临时目录）。</p>
+</blockquote>
+<hr>
+<h3 id="步骤-5：用-Clonezilla-将-Win11-镜像写入-A-盘（-dev-sda）"><a href="#步骤-5：用-Clonezilla-将-Win11-镜像写入-A-盘（-dev-sda）" class="headerlink" title="步骤 5：用 Clonezilla 将 Win11 镜像写入 A 盘（/dev/sda）"></a>步骤 5：用 Clonezilla 将 Win11 镜像写入 A 盘（<code>/dev/sda</code>）</h3><blockquote>
+<p>⚠️ <strong>此操作将彻底覆盖 PVE 系统！</strong></p>
+</blockquote>
+<ol>
+<li>制作 <a target="_blank" rel="noopener" href="https://clonezilla.org/">Clonezilla Live USB</a></li>
+<li>重启服务器，从 USB 启动</li>
+<li>选择：<ul>
+<li>Language → English</li>
+<li>Keyboard → Don’t touch</li>
+<li>Mode → <code>device-image</code></li>
+<li>Action → <code>restoredisk</code></li>
+</ul>
+</li>
+<li>选择镜像源：从本地磁盘加载 <code>/tmp/win11.raw</code>（可通过 SSH 或挂载临时分区访问）</li>
+<li>选择目标磁盘：<strong><code>/dev/sda</code></strong></li>
+<li>确认执行，等待完成</li>
+</ol>
+<blockquote>
+<p>✅ 完成后，A 盘已成为一个完整的 Windows 11 物理系统盘。</p>
+</blockquote>
+<hr>
+<h3 id="步骤-6：修复-Windows-引导"><a href="#步骤-6：修复-Windows-引导" class="headerlink" title="步骤 6：修复 Windows 引导"></a>步骤 6：修复 Windows 引导</h3><p>由于虚拟机使用模拟硬件，物理机启动可能失败。使用 Win11 安装 U 盘修复：</p>
+<ol>
+<li>从 Win11 安装 U 盘启动</li>
+<li>选择“修复计算机” → “疑难解答” → “命令提示符”</li>
+<li>执行以下命令：</li>
+</ol>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cmd">diskpart<br>list disk<br>select disk <span class="hljs-number">0</span><br>list partition<br>select partition X    ← 选择 EFI 系统分区（通常 <span class="hljs-number">100</span>–<span class="hljs-number">300</span>MB，FAT32）<br>assign letter=S<br><span class="hljs-keyword">exit</span><br><br>bcdboot C:\Windows /s S: /f UEFI<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>重启，应能正常进入 Windows 11</li>
+</ol>
+<blockquote>
+<p>💡 若遇蓝屏（如 <code>INACCESSIBLE_BOOT_DEVICE</code>），需提前在虚拟机中安装通用 NVMe&#x2F;AHCI 驱动，或使用 Sysprep 泛化系统。实测：不是报错 Bitlocker 开启就是提醒我有更新挂起，放弃了</p>
+</blockquote>
+<hr>
+<h3 id="步骤-7：初始化-B-盘为-NTFS-并恢复数据"><a href="#步骤-7：初始化-B-盘为-NTFS-并恢复数据" class="headerlink" title="步骤 7：初始化 B 盘为 NTFS 并恢复数据"></a>步骤 7：初始化 B 盘为 NTFS 并恢复数据</h3><ol>
+<li>进入 Windows 11</li>
+<li>打开“磁盘管理”</li>
+<li>找到 <strong>磁盘 1（即原 B 盘 <code>/dev/sdb</code>）</strong></li>
+<li>初始化为 <strong>GPT</strong></li>
+<li>创建新简单卷 → 格式化为 <strong>NTFS</strong> → 分配盘符（如 <code>D:</code>）</li>
+<li>将 C 盘（<code>/dev/sdc</code>）接入 Windows（通过 SATA&#x2F;USB）</li>
+<li>从 C 盘复制 <code>ubuntu_data</code> 文件夹到 <code>D:\</code></li>
+</ol>
+<blockquote>
+<p>✅ 完成！你现在拥有一台纯净的 Windows 11 物理机，且保留了所有历史数据。</p>
+</blockquote>
+<hr>
+<h2 id="🧹-后续清理（可选）"><a href="#🧹-后续清理（可选）" class="headerlink" title="🧹 后续清理（可选）"></a>🧹 后续清理（可选）</h2><ul>
+<li><strong>C 盘</strong>：可保留作为备份盘，或重新加入其他系统</li>
+<li><strong>B 盘 LVM 元数据</strong>：已被 NTFS 覆盖，无需额外清理</li>
+</ul>
+<hr>
+<h2 id="🔚-总结"><a href="#🔚-总结" class="headerlink" title="🔚 总结"></a>🔚 总结</h2><table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>关键操作</th>
+<th>注意事项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>关闭 Win11 VM</td>
+<td>确保数据一致性</td>
+</tr>
+<tr>
+<td>2</td>
+<td>C 盘格式化为 NTFS</td>
+<td>必须清除 LVM 标记</td>
+</tr>
+<tr>
+<td>3</td>
+<td>备份 B 盘数据到 C 盘</td>
+<td>使用 <code>cp -a</code> 保留文件属性</td>
+</tr>
+<tr>
+<td>4</td>
+<td>导出 Win11 为 raw 镜像</td>
+<td>确认磁盘格式（qcow2&#x2F;raw）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Clonezilla 写入 A 盘</td>
+<td><strong>PVE 将被销毁！</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td>修复 Windows 引导</td>
+<td>几乎必做</td>
+</tr>
+<tr>
+<td>7</td>
+<td>B 盘转 NTFS + 恢复数据</td>
+<td>在 Windows 中操作</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="💬-最后建议"><a href="#💬-最后建议" class="headerlink" title="💬 最后建议"></a>💬 最后建议</h2><ul>
+<li>如果 Win11 虚拟机未安装通用驱动，<strong>强烈建议在迁移前运行 Sysprep</strong>：<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmd"><span class="hljs-function">C:\<span class="hljs-title">Windows</span>\<span class="hljs-title">System32</span>\<span class="hljs-title">Sysprep</span>\<span class="hljs-title">sysprep.exe</span> /<span class="hljs-title">generalize</span> /<span class="hljs-title">shutdown</span> /<span class="hljs-title">oobe</span></span><br></code></pre></td></tr></table></figure></li>
+<li>实测：不是报错 Bitlocker 开启就是提醒我有更新挂起，放弃了</li>
+<li>此方案适用于任何 Linux 虚拟化平台（如 KVM、oVirt），不仅限于 PVE。</li>
+</ul>
+<hr>
+<blockquote>
+<p>🌟 <strong>成功的关键：在 PVE 消失前，把所有数据和镜像准备好！</strong></p>
+</blockquote>
+<p>希望这篇指南能帮你顺利完成迁移。</p>
+<p>写作说明：以上部分内容来自 AI 生成，经过全部实测后补充了内容。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>从 Proxmox VE 迁移 Windows 11 虚拟机到物理机</div>
+      <div>https://enldm.cyou/2025/12/从Proxmox VE 迁移 Windows 11 虚拟机到物理机/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ENLDM</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年12月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/12/+86%E6%B3%A8%E5%86%8Ctelegram%E6%94%B6%E4%B8%8D%E5%88%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%9A%84%E8%A7%A3%E5%86%B3/" title="+86注册telegram收不到验证码的解决">
+                        <span class="hidden-mobile">+86注册telegram收不到验证码的解决</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <script defer src="https://cloud.umami.is/script.js" data-website-id="879a813a-f5fa-4368-9f9d-f47dff6b1927"></script>
+
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://cdn.bootcdn.net/ajax/libs/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js" ></script>
+<script  src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://cdn.bootcdn.net/ajax/libs/typed.js/2.0.0/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/mouse-icon-effect.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
