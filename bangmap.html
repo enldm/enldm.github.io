@@ -13,7 +13,7 @@
     <meta name="description" content="全国BanG Dream!同好会地图|全国邦邦地图 — 收录全国地域性BanG Dream!粉丝组织、活动地点与交流平台。">
     <meta name="msapplication-starturl" content="/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#fcb3c8">
+    <meta name="theme-color" content="#DB0054">
     <script defer src="https://cloud.umami.is/script.js"
         data-website-id="ad547ccf-627a-4293-a348-8ef6c860aa63"></script>
     <title>全国BanG Dream!同好会地图</title>
@@ -22,52 +22,330 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script defer src="/js/mouse-icon-effect.js"></script>
     <style>
+        @font-face {
+            font-family: 'ZhanKuKuaiLeTi';
+            src: url('/ZhanKuKuaiLeTi.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        * {
+            font-family: 'ZhanKuKuaiLeTi', 'Microsoft YaHei', Arial, sans-serif;
+        }
+
         body {
-            font-family: 'Microsoft YaHei', Arial, sans-serif;
             margin: 0;
             padding: 20px;
             background-image: url('https://bang-dream.com/img/top/kv-slide-loading-bg.png');
             background-repeat: repeat;
             background-attachment: fixed;
-            /* 可选：让背景随页面滚动 */
+            min-height: 100vh;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-
         }
 
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+        }
 
+        .header h1 {
+            color: #DB0054;
+            font-size: 36px;
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            color: #DB0054;
+            font-size: 18px;
+            margin: 0;
         }
 
         #map {
             width: 100%;
-            height: 40vh;
+            height: 50vh;
             max-height: 700px;
             min-height: 400px;
-            background-color: rgba(255, 255, 255, 0);
+            background-color: rgba(255, 255, 255, 0.3);
             border-radius: 20px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(219, 0, 84, 0.15);
+            backdrop-filter: blur(10px);
         }
 
+        /* 毛玻璃悬浮窗样式 */
+        .glass-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            padding: 30px;
+            width: 80vw;
+            max-width: 1200px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 10000;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .glass-modal.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -45%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .glass-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(219, 0, 84, 0.2);
+        }
+
+        .glass-modal-title {
+            color: #DB0054;
+            font-size: 28px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .glass-modal-close {
+            background: rgba(219, 0, 84, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #DB0054;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass-modal-close:hover {
+            background: rgba(219, 0, 84, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .groups-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .group-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(219, 0, 84, 0.1), rgba(219, 0, 84, 0.05));
+            border-radius: 50px;
+            border: 2px solid rgba(219, 0, 84, 0.2);
+            color: #DB0054;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .group-tag:hover {
+            background: linear-gradient(135deg, rgba(219, 0, 84, 0.2), rgba(219, 0, 84, 0.1));
+            border-color: rgba(219, 0, 84, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(219, 0, 84, 0.2);
+        }
+
+        .group-tag.copied {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border-color: #4CAF50;
+            color: white;
+        }
+
+        .group-tag.empty {
+            background: rgba(200, 200, 200, 0.1);
+            border-color: rgba(200, 200, 200, 0.3);
+            color: #999;
+            cursor: default;
+        }
+
+        .group-tag.empty:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* 遮罩层 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            display: block;
+        }
+
+        /* 信息面板样式 */
         .info-panel {
             margin-top: 20px;
-            padding: 20px;
-            background-color: #fff;
+            padding: 25px;
+            background-color: rgba(255, 255, 255, 0.6);
             border-radius: 20px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-            background-color: rgba(255, 255, 255, 0);
+            box-shadow: 0 4px 20px rgba(219, 0, 84, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .info-panel p {
+            color: #DB0054;
+            font-size: 16px;
+            margin: 10px 0;
+            line-height: 1.8;
+        }
+
+        .info-panel a {
+            color: #DB0054;
+            text-decoration: none;
+            border-bottom: 2px dotted rgba(219, 0, 84, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .info-panel a:hover {
+            border-bottom-style: solid;
+            border-bottom-color: #DB0054;
+        }
+
+        /* 投稿表单样式 */
+        #contact-form {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(219, 0, 84, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        #contact-form h3 {
+            color: #DB0054;
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        #contact-form select,
+        #contact-form input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(219, 0, 84, 0.2);
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #333;
+            background: rgba(255, 255, 255, 0.8);
+            transition: border 0.3s ease;
+            font-family: 'ZhanKuKuaiLeTi', 'Microsoft YaHei', Arial, sans-serif;
+        }
+
+        #contact-form select:focus,
+        #contact-form input:focus {
+            outline: none;
+            border-color: #DB0054;
+            background: rgba(255, 255, 255, 1);
+        }
+
+        #contact-form select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23DB0054' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 40px;
+        }
+
+        #contact-form button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #DB0054, #c0004a);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'ZhanKuKuaiLeTi', 'Microsoft YaHei', Arial, sans-serif;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(219, 0, 84, 0.3);
+        }
+
+        #contact-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(219, 0, 84, 0.4);
+        }
+
+        #contact-form button:active {
+            transform: translateY(0);
         }
 
         .mouse-icon {
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            /* transform-origin: center; */
+        }
+
+        /* 复制提示 */
+        .copy-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 16px;
+            z-index: 10001;
+            opacity: 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .copy-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
     </style>
 </head>
@@ -76,15 +354,13 @@
     <div class="container">
         <div class="header">
             <h1>全国BanG Dream!同好会地图</h1>
+            <p>キラキラドキドキ</p>
         </div>
 
         <div id="map"></div>
 
-        <div class="info-panel" id="infoPanel">
-            <p>点击地图上的省份板块查看详细信息</p>
-        </div>
 
-        <div class="info-panel" id="infoPanel">
+        <div class="info-panel" id="infoPanel2">
             <p>🔗 <a
                     href="https://enldm.cyou/2025/10/%E5%85%A8%E5%9B%BD%E9%82%A6%E9%82%A6%E5%9C%B0%E5%9B%BE%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/">开发&更新日志</a>
             </p>
@@ -92,289 +368,491 @@
                 <a href="https://game.bilibili.com/bangdream/exchange/">手游兑换码</a>
                 <a href="https://enldm.cyou/pjskmap">全国Project Sekai同好会地图</a>
             </p>
-            <p>📢 海外以及各地高校群号也接受投稿中！</p>
-            <p>💊 请不要举办网站！没备案恳请放过！</p>
             <p>✉️ 投稿勘误：加入Q群 636949985 或发送邮件至 <a href="mailto:admin@enldm.cyou">admin@enldm.cyou</a></p>
             <p style="text-align: center;">❤ 特别鸣谢：<a href="https://seieya.ip-ddns.com/">@zkylin</a> <a
                     href="https://enldm.cyou">@enldm</a></p>
         </div>
 
-        <div id="contact-form"
-            style="max-width: 500px; margin: 40px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+        <div id="contact-form">
             <h3>在线投稿</h3>
-            <textarea id="msg" placeholder="请输入投稿内容，请包含具体地区信息/高校全称+群名+正确的群号，正常情况一到两天内更新，请确保群号正确并且可以被搜素。计划开发投稿查询上线查询中..."
-                rows="4" style="
-        width: 100%;
-        padding: 12px;
-        margin-bottom: 10px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-sizing: border-box;
-        font-size: 15px;
-        color: #333;
-        resize: vertical;
-        transition: border 0.3s ease;
-    "></textarea>
+            <div class="form-group">
+                <select id="submissionType">
+                    <option value="">请选择投稿类型</option>
+                    <option value="地区大群">地区大群</option>
+                    <option value="学校">学校</option>
+                    <option value="其他">其他</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" id="locationName" placeholder="请输入完整学校/城市名称">
+            </div>
+            <div class="form-group">
+                <input type="text" id="groupNumber" placeholder="请输入正确的群号">
+            </div>
             <!-- Turnstile Widget -->
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
                 <div class="cf-turnstile" data-sitekey="0x4AAAAAAB7bLKDGHTTCmU9N" data-theme="light" data-size="normal">
                 </div>
-                <button onclick="submitMessage()"
-                    style="padding: 10px 20px; background: #0088cc; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                    发送投稿
-                </button>
+                <button onclick="submitMessage()">发送投稿</button>
             </div>
+        </div>
+    </div>
 
+    <!-- 毛玻璃悬浮窗 -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+    <div class="glass-modal" id="glassModal">
+        <div class="glass-modal-header">
+            <h2 class="glass-modal-title" id="modalTitle">省份名称</h2>
+            <button class="glass-modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="groups-container" id="groupsContainer">
+            <!-- 群号标签将动态添加到这里 -->
+        </div>
+    </div>
 
-            <script>
-                // 初始化ECharts
-                const myChart = echarts.init(document.getElementById('map'));
+    <!-- 复制提示 -->
+    <div class="copy-toast" id="copyToast">已复制到剪贴板！</div>
 
-                // 加载中国地图数据和省份城市数据
-                Promise.all([
-                    fetch('mapdata.json').then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    }),
-                    fetch('banggroupinfo.json').then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                ]).then(([mapData, provinceCities]) => {
-                    // 注册中国地图
-                    echarts.registerMap('china', mapData);
+    <script>
+        // 马卡龙配色方案 - 柔和的颜色
+        const macaronColors = [
+            '#FFB7B2', // 柔和粉
+            '#B5EAD7', // 薄荷绿
+            '#C7CEEA', // 薰衣草紫
+            '#FFDAC1', // 杏色
+            '#E2F0CB', // 淡绿
+            '#FFDFD3', // 淡桃色
+            '#BFCED6', // 淡蓝灰
+            '#F0E68C', // 卡其色
+            '#DDA0DD', // 梅红
+            '#87CEEB', // 天蓝
+            '#F5DEB3', // 小麦色
+            '#FFB6C1', // 浅粉红
+            '#98FB98', // 苍绿
+            '#DDA0DD', // 梅红
+            '#FFDAB9', // 桃色
+            '#ADD8E6', // 淡蓝
+            '#F0FFF0', // 蜜瓜色
+            '#FFE4E1', // 薄雾玫瑰
+            '#E6E6FA', // 淡紫
+            '#FFF0F5', // 淡紫红
+            '#F0FFFF', // 淡青
+            '#FFFACD', // 柠檬绸色
+            '#FFE4B5', // 鹿皮色
+            '#E0FFFF', // 淡青
+            '#FFFAF0', // 花卉白
+            '#F5FFFA', // 薄荷奶油
+            '#FFFFE0', // 淡黄
+            '#FFF8DC', // 玉米丝色
+            '#FFEFD5', // 木瓜色
+            '#FFF5EE', // 海贝壳色
+            '#FDF5E6'  // 老蕾丝色
+        ];
 
-                    // 配置地图选项
-                    const option = {
-                        title: {
-                            text: '点击省份下滑查看群号',
-                            subtext: '欢迎收藏转发分享本网站',
-                            left: 'center',
-                            textStyle: {
-                                fontSize: 20,
-                                fontWeight: 'bold'
-                            },
-                            subtextStyle: {
-                                fontSize: 14,
-                                color: '#666'
-                            }
-                        },
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: function (params) {
-                                return params.name;
-                            },
-                            backgroundColor: 'rgba(255,255,255,0.9)',
-                            borderColor: '#91d5ff',
-                            borderWidth: 1,
-                            textStyle: {
-                                color: '#333'
-                            }
-                        },
-                        visualMap: {
-                            show: false
-                        },
-                        series: [
-                            {
-                                name: '省份',
-                                type: 'map',
-                                map: 'china',
-                                roam: true,  // 允许缩放和平移
-                                zoom: 1.6,
-                                center: [105, 36],
-                                label: {
-                                    show: true,
-                                    fontSize: 15,
-                                    color: '#333',
-                                    fontWeight: 1300,
-                                    formatter: function (params) {
-                                        let name = params.name;
-                                        // 去除特定后缀
-                                        name = name
-                                            .replace(/特别行政区$/, '')
-                                            .replace(/壮族自治区$/, '省')
-                                            .replace(/维吾尔自治区$/, '省')
-                                            .replace(/回族自治区$/, '省')
-                                            .replace(/自治区$/, '')
-                                        return name;
-                                    }
-                                },
-                                itemStyle: {
-                                    areaColor: '#fcb3c8',
-                                    borderColor: '#e00052',
-                                    borderWidth: 1.0
-                                },
-                                emphasis: {
-                                    itemStyle: {
-                                        areaColor: '#e00052',
-                                        shadowBlur: 20,
-                                        shadowColor: 'rgba(0, 0, 0, 0.3)'
-                                    },
-                                    label: {
-                                        show: true,
-                                        color: '#fff',
-                                        fontSize: 12,
-                                        fontWeight: 35
-                                    }
-                                }
-                            }
-                        ],
-                        graphic: [
-                            {
-                                type: 'group',
-                                left: '20px',
-                                top: '40px',
-                                name: 'btn-overseas',
+        // 省份相邻关系（用于确保相邻省份颜色不同）
+        const provinceAdjacency = {
+            '黑龙江省': ['吉林省', '内蒙古自治区'],
+            '吉林省': ['黑龙江省', '辽宁省', '内蒙古自治区'],
+            '辽宁省': ['吉林省', '河北省', '内蒙古自治区'],
+            '内蒙古自治区': ['黑龙江省', '吉林省', '辽宁省', '河北省', '山西省', '陕西省', '宁夏回族自治区', '甘肃省'],
+            '河北省': ['辽宁省', '内蒙古自治区', '山西省', '北京市', '天津市', '山东省', '河南省'],
+            '北京市': ['河北省', '天津市'],
+            '天津市': ['河北省', '北京市', '山东省'],
+            '山西省': ['内蒙古自治区', '河北省', '陕西省', '河南省'],
+            '山东省': ['河北省', '天津市', '河南省', '安徽省', '江苏省'],
+            '河南省': ['河北省', '山西省', '陕西省', '湖北省', '安徽省', '山东省', '江苏省'],
+            '陕西省': ['内蒙古自治区', '山西省', '河南省', '湖北省', '重庆市', '四川省', '甘肃省', '宁夏回族自治区'],
+            '甘肃省': ['内蒙古自治区', '宁夏回族自治区', '陕西省', '四川省', '青海省', '新疆维吾尔自治区'],
+            '宁夏回族自治区': ['内蒙古自治区', '甘肃省', '陕西省'],
+            '青海省': ['甘肃省', '新疆维吾尔自治区', '四川省', '西藏自治区'],
+            '新疆维吾尔自治区': ['甘肃省', '青海省', '西藏自治区'],
+            '西藏自治区': ['新疆维吾尔自治区', '青海省', '四川省', '云南省'],
+            '四川省': ['陕西省', '甘肃省', '青海省', '西藏自治区', '云南省', '贵州省', '重庆市', '湖北省', '河南省'],
+            '重庆市': ['陕西省', '四川省', '湖北省', '湖南省', '贵州省'],
+            '云南省': ['西藏自治区', '四川省', '贵州省', '广西壮族自治区'],
+            '贵州省': ['四川省', '重庆市', '云南省', '广西壮族自治区', '湖南省', '湖北省'],
+            '湖北省': ['河南省', '陕西省', '重庆市', '湖南省', '江西省', '安徽省', '重庆市'],
+            '湖南省': ['湖北省', '重庆市', '贵州省', '广西壮族自治区', '广东省', '江西省'],
+            '广西壮族自治区': ['湖南省', '贵州省', '云南省', '广东省'],
+            '广东省': ['福建省', '江西省', '湖南省', '广西壮族自治区', '海南省', '香港特别行政区', '澳门特别行政区'],
+            '海南省': ['广东省'],
+            '福建省': ['浙江省', '江西省', '广东省', '台湾省'],
+            '浙江省': ['上海市', '江苏省', '安徽省', '江西省', '福建省'],
+            '江苏省': ['山东省', '安徽省', '上海市', '浙江省'],
+            '上海市': ['江苏省', '浙江省'],
+            '安徽省': ['山东省', '河南省', '湖北省', '江西省', '浙江省', '江苏省'],
+            '江西省': ['安徽省', '湖北省', '湖南省', '广东省', '福建省', '浙江省'],
+            '台湾省': ['福建省'],
+            '香港特别行政区': ['广东省', '澳门特别行政区', '台湾省'],
+            '澳门特别行政区': ['广东省', '香港特别行政区']
+        };
 
-                                children: [
-                                    {
-                                        type: 'rect',
-                                        shape: {
-                                            width: 40,
-                                            height: 30,
-                                            r: 5,
-                                        },
-                                        style: {
-                                            fill: '#5470c6',
-                                        },
-                                        key: 'overseas-btn',
-                                        // 鼠标样式
-                                        cursor: 'pointer',
+        // 为省份分配颜色（确保相邻省份颜色不同）
+        function assignProvinceColors() {
+            const colors = {};
+            const provinces = Object.keys(provinceAdjacency);
 
-                                    },
-                                    {
-                                        type: 'text',
-                                        style: {
-                                            text: '海外',
-                                            fontSize: 12,
-                                            fontWeight: 'bold',
-                                            fill: '#fff',
-                                            align: 'center',
-                                            verticalAlign: 'middle',
-                                            x: 20,
-                                            y: 15,
-                                            textAlign: 'center',
-                                            verticalAlign: 'middle'
-                                        },
-
-                                    }
-                                ]
-                            }
-                        ]
-
-                    };
-
-                    // 设置配置项
-                    myChart.setOption(option);
-
-                    // 添加点击事件
-                    // 封装：统一的信息面板更新函数
-                    function updateInfoPanel(title, citiesList) {
-                        const infoPanel = document.getElementById('infoPanel');
-                        if (!infoPanel) return;
-
-                        const content = Array.isArray(citiesList) && citiesList.length > 0
-                            ? citiesList.map(city => `
-            <p style="
-                padding: 4px 12px;
-                border-radius: 4px;
-                font-size: 20px;
-                margin: 4px 0;
-                background: #f0f7ff;
-                color: #333;
-                white-space: normal;
-            ">${city}</p>
-          `).join('')
-                            : '<p style="color: #999; font-size: 18px;">暂无数据</p>';
-
-                        infoPanel.innerHTML = `
-        <h1>${title}</h1>
-        <h2><strong>下属列表：</strong></h2>
-        <p style="margin-top: 10px;">
-            ${content}
-        </p>
-    `;
+            for (const province of provinces) {
+                const usedColors = new Set();
+                // 获取已分配颜色的相邻省份
+                const neighbors = provinceAdjacency[province] || [];
+                neighbors.forEach(neighbor => {
+                    if (colors[neighbor]) {
+                        usedColors.add(colors[neighbor]);
                     }
-
-                    // ECharts 点击事件（优化后）
-                    myChart.on('click', function (params) {
-                        // 情况1：点击的是“海外”按钮
-                        if (params.componentType === 'graphic') {
-                            const overseasData = provinceCities['海外'] || ['暂无海外数据'];
-                            updateInfoPanel('🌍 海外', overseasData);
-                            return;
-                        }
-
-                        // 情况2：点击的是地图上的省份
-                        const provinceName = params.name;
-                        const cities = provinceCities[provinceName] || ['暂无该省数据'];
-
-                        // 使用统一函数更新面板
-                        updateInfoPanel(`📍 ${provinceName}`, cities);
-                    });
-
-                    // 添加加载完成提示
-                    console.log('地图数据加载成功！按F12是想看什么？');
-
-                })
-                    .catch(error => {
-                        console.error('⚠地图数据加载失败:', error);
-                        document.getElementById('infoPanel').innerHTML =
-                            `<p style="color: red;">⚠地图数据加载失败：${error.message}</p>
-                     <p>请检查网络连接或稍后重试。</p>`;
-                    });
-
-                // 处理窗口大小变化
-                window.addEventListener('resize', function () {
-                    myChart.resize();
                 });
 
-                // 在线投稿
-                async function submitMessage() {
-                    const message = document.getElementById('msg').value.trim();
-                    const turnstileToken = window.turnstile?.getResponse();
-
-                    if (!message || message.length > 1000) {
-                        alert('请输入 1-1000 字符的消息');
-                        return;
-                    }
-
-                    if (!turnstileToken) {
-                        alert('请完成人机验证');
-                        return;
-                    }
-
-                    const url = 'https://tgapi.enldm.cyou/'; // 你的 Worker 地址
-
-                    try {
-                        const res = await fetch(url, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                message,
-                                'cf-turnstile-response': turnstileToken
-                            })
-                        });
-
-                        const data = await res.json();
-
-                        if (data.success) {
-                            alert('✅ 消息已发送！');
-                            document.getElementById('msg').value = '';
-                            window.turnstile.reset(); // 重置验证码
-                        } else {
-                            alert('❌ 发送失败：' + (data.error || '未知错误'));
-                        }
-                    } catch (err) {
-                        alert('网络错误，请稍后重试');
-                        console.error(err);
+                // 找到第一个未被使用的颜色
+                for (const color of macaronColors) {
+                    if (!usedColors.has(color)) {
+                        colors[province] = color;
+                        break;
                     }
                 }
-            </script>
+
+                // 如果所有颜色都被使用，随机选择一个
+                if (!colors[province]) {
+                    colors[province] = macaronColors[Math.floor(Math.random() * macaronColors.length)];
+                }
+            }
+
+            // 为未定义的省份分配随机颜色
+            // 使用省份名称的哈希值来确保一致性
+            const allProvinceNames = [
+                '黑龙江省', '吉林省', '辽宁省', '内蒙古自治区', '河北省', '北京市', '天津市', '山西省',
+                '山东省', '河南省', '陕西省', '甘肃省', '宁夏回族自治区', '青海省', '新疆维吾尔自治区',
+                '西藏自治区', '四川省', '重庆市', '云南省', '贵州省', '湖北省', '湖南省', '广西壮族自治区',
+                '广东省', '海南省', '福建省', '浙江省', '江苏省', '上海市', '安徽省', '江西省', '台湾省',
+                '香港特别行政区', '澳门特别行政区'
+            ];
+
+            allProvinceNames.forEach(province => {
+                if (!colors[province]) {
+                    let hash = 0;
+                    for (let i = 0; i < province.length; i++) {
+                        hash = province.charCodeAt(i) + ((hash << 5) - hash);
+                    }
+                    colors[province] = macaronColors[Math.abs(hash) % macaronColors.length];
+                }
+            });
+
+            return colors;
+        }
+
+        const provinceColors = assignProvinceColors();
+
+        // 为 ECharts 创建数据数组
+        function createMapData() {
+            const data = [];
+            for (const province in provinceColors) {
+                data.push({
+                    name: province,
+                    itemStyle: {
+                        areaColor: provinceColors[province]
+                    }
+                });
+            }
+            return data;
+        }
+
+        // 初始化ECharts
+        const myChart = echarts.init(document.getElementById('map'));
+
+        // 加载中国地图数据和省份城市数据
+        Promise.all([
+            fetch('mapdata.json').then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            }),
+            fetch('banggroupinfo.json').then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+        ]).then(([mapData, provinceCities]) => {
+            // 注册中国地图
+            echarts.registerMap('china', mapData);
+
+            // 配置地图选项
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params) {
+                        return params.name;
+                    },
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    borderColor: '#DB0054',
+                    borderWidth: 2,
+                    textStyle: {
+                        color: '#DB0054',
+                        fontSize: 14
+                    }
+                },
+                visualMap: {
+                    show: false
+                },
+                series: [
+                    {
+                        name: '省份',
+                        type: 'map',
+                        map: 'china',
+                        roam: true,
+                        zoom: 1.6,
+                        center: [105, 36],
+                        data: createMapData(),
+                        label: {
+                            show: true,
+                            fontSize: 14,
+                            color: '#333',
+                            fontWeight: 'bold',
+                            formatter: function (params) {
+                                let name = params.name;
+                                name = name
+                                    .replace(/特别行政区$/, '')
+                                    .replace(/壮族自治区$/, '')
+                                    .replace(/维吾尔自治区$/, '')
+                                    .replace(/回族自治区$/, '')
+                                    .replace(/自治区$/, '')
+                                    .replace(/省$/, '');
+                                return name;
+                            }
+                        },
+                        itemStyle: {
+                            borderColor: '#ffffff',
+                            borderWidth: 2,
+                            opacity: 0.9
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                areaColor: '#DB0054',
+                                shadowBlur: 20,
+                                shadowColor: 'rgba(219, 0, 84, 0.5)',
+                                opacity: 1
+                            },
+                            label: {
+                                show: true,
+                                color: '#fff',
+                                fontSize: 13,
+                                fontWeight: 'bold'
+                            }
+                        }
+                    }
+                ],
+                graphic: [
+                    {
+                        type: 'group',
+                        left: '20px',
+                        top: '40px',
+                        name: 'btn-overseas',
+                        children: [
+                            {
+                                type: 'rect',
+                                shape: {
+                                    width: 50,
+                                    height: 35,
+                                    r: 8,
+                                },
+                                style: {
+                                    fill: '#DB0054',
+                                },
+                                cursor: 'pointer',
+                            },
+                            {
+                                type: 'text',
+                                style: {
+                                    text: '海外',
+                                    fontSize: 14,
+                                    fontWeight: 'bold',
+                                    fill: '#fff',
+                                    align: 'center',
+                                    verticalAlign: 'middle',
+                                    x: 25,
+                                    y: 17,
+                                    textAlign: 'center',
+                                    verticalAlign: 'middle'
+                                },
+                            }
+                        ]
+                    }
+                ]
+            };
+
+            // 设置配置项
+            myChart.setOption(option);
+
+            // 打开模态框
+            function openModal(title, citiesList) {
+                const modal = document.getElementById('glassModal');
+                const overlay = document.getElementById('modalOverlay');
+                const titleEl = document.getElementById('modalTitle');
+                const container = document.getElementById('groupsContainer');
+
+                titleEl.textContent = title;
+                container.innerHTML = '';
+
+                if (Array.isArray(citiesList) && citiesList.length > 0) {
+                    citiesList.forEach(city => {
+                        const tag = document.createElement('div');
+                        tag.className = 'group-tag';
+
+                        // 检查是否包含数字
+                        const numberMatch = city.match(/\d+/g);
+                        const hasNumber = numberMatch && numberMatch.length > 0;
+
+                        if (hasNumber) {
+                            tag.textContent = city;
+                            tag.onclick = () => copyToClipboard(city, tag);
+                        } else {
+                            tag.textContent = city;
+                            tag.classList.add('empty');
+                        }
+
+                        container.appendChild(tag);
+                    });
+                } else {
+                    container.innerHTML = '<div class="group-tag empty">暂无数据</div>';
+                }
+
+                modal.classList.add('active');
+                overlay.classList.add('active');
+            }
+
+            // 关闭模态框
+            function closeModal() {
+                const modal = document.getElementById('glassModal');
+                const overlay = document.getElementById('modalOverlay');
+                modal.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+
+            // 复制到剪贴板
+            function copyToClipboard(text, element) {
+                // 提取数字
+                const numbers = text.match(/\d+/g);
+                if (numbers && numbers.length > 0) {
+                    const numberToCopy = numbers[numbers.length - 1]; // 复制最后一个数字
+
+                    navigator.clipboard.writeText(numberToCopy).then(() => {
+                        // 显示复制成功状态
+                        element.classList.add('copied');
+                        element.textContent = '已复制！';
+
+                        // 显示提示
+                        const toast = document.getElementById('copyToast');
+                        toast.classList.add('show');
+
+                        setTimeout(() => {
+                            element.classList.remove('copied');
+                            element.textContent = text;
+                            toast.classList.remove('show');
+                        }, 1500);
+                    }).catch(err => {
+                        console.error('复制失败:', err);
+                        alert('复制失败，请手动复制');
+                    });
+                }
+            }
+
+            // 将函数暴露到全局作用域
+            window.closeModal = closeModal;
+
+            // 添加点击事件
+            myChart.on('click', function (params) {
+                if (params.componentType === 'graphic') {
+                    const overseasData = provinceCities['海外'] || ['暂无海外数据'];
+                    openModal('🌍 海外', overseasData);
+                    return;
+                }
+
+                const provinceName = params.name;
+                const cities = provinceCities[provinceName] || ['暂无该省数据'];
+                openModal(`📍 ${provinceName}`, cities);
+            });
+
+            // 添加加载完成提示
+            console.log('地图数据加载成功！按F12是想看什么？');
+
+        })
+            .catch(error => {
+                console.error('⚠地图数据加载失败:', error);
+                document.getElementById('infoPanel').innerHTML =
+                    `<p style="color: #DB0054;">⚠地图数据加载失败：${error.message}</p>
+                     <p style="color: #DB0054;">请检查网络连接或稍后重试。</p>`;
+            });
+
+        // 处理窗口大小变化
+        window.addEventListener('resize', function () {
+            myChart.resize();
+        });
+
+        // 在线投稿
+        async function submitMessage() {
+            const submissionType = document.getElementById('submissionType').value.trim();
+            const locationName = document.getElementById('locationName').value.trim();
+            const groupNumber = document.getElementById('groupNumber').value.trim();
+            const turnstileToken = window.turnstile?.getResponse();
+
+            if (!submissionType) {
+                alert('请选择投稿类型');
+                return;
+            }
+
+            if (!locationName) {
+                alert('请输入完整学校/城市名称');
+                return;
+            }
+
+            if (!groupNumber) {
+                alert('请输入正确的群号');
+                return;
+            }
+
+            if (!turnstileToken) {
+                alert('请完成人机验证');
+                return;
+            }
+
+            const message = `【${submissionType}】${locationName} - 群号：${groupNumber}`;
+
+            const url = 'https://tgapi.enldm.cyou/';
+
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message,
+                        'cf-turnstile-response': turnstileToken
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    alert('✅ 投稿已发送！感谢您的贡献！');
+                    document.getElementById('submissionType').value = '';
+                    document.getElementById('locationName').value = '';
+                    document.getElementById('groupNumber').value = '';
+                    window.turnstile.reset();
+                } else {
+                    alert('❌ 发送失败：' + (data.error || '未知错误'));
+                }
+            } catch (err) {
+                alert('网络错误，请稍后重试');
+                console.error(err);
+            }
+        }
+
+        // ESC键关闭模态框
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
 </body>
 
 </html>
