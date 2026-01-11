@@ -79,14 +79,31 @@
         }
 
         /* 海外按钮覆盖层 - 移动端兼容 */
-        .overseas-btn-overlay {
+        .overseas-btn-wrapper {
             position: absolute;
-            top: 40px;
-            left: 20px;
-            width: 50px;
-            height: 35px;
-            z-index: 100;
+            z-index: 10000;
+            pointer-events: auto;
+        }
+
+        .overseas-btn-overlay {
+            width: 60px;
+            height: 40px;
             cursor: pointer;
+            background: rgba(219, 0, 84, 0.1);
+            border-radius: 8px;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #DB0054;
+            user-select: none;
+        }
+
+        .overseas-btn-overlay:hover,
+        .overseas-btn-overlay:active {
+            background: rgba(219, 0, 84, 0.3);
         }
 
         /* 毛玻璃悬浮窗样式 */
@@ -369,8 +386,11 @@
             <p>キラキラドキドキ</p>
         </div>
 
-        <div id="map">
-            <div class="overseas-btn-overlay" id="overseasBtn"></div>
+        <div id="map"></div>
+
+        <!-- 海外按钮覆盖层 -->
+        <div class="overseas-btn-wrapper" id="overseasBtnWrapper">
+            <div class="overseas-btn-overlay" id="overseasBtn">海外</div>
         </div>
 
 
@@ -587,6 +607,8 @@
                 return response.json();
             })
         ]).then(([mapData, provinceCities]) => {
+            console.log('数据加载成功，海外数据:', provinceCities['海外']);
+
             // 注册中国地图
             echarts.registerMap('china', mapData);
 
@@ -700,12 +722,29 @@
             // 设置配置项
             myChart.setOption(option);
 
+            // 动态定位海外按钮
+            const mapContainer = document.getElementById('map');
+            const overseasBtnWrapper = document.getElementById('overseasBtnWrapper');
+
+            function positionOverseasButton() {
+                const mapRect = mapContainer.getBoundingClientRect();
+                overseasBtnWrapper.style.top = (mapRect.top + 40) + 'px';
+                overseasBtnWrapper.style.left = (mapRect.left + 20) + 'px';
+            }
+
+            // 初始定位
+            positionOverseasButton();
+            // 窗口大小改变时重新定位
+            window.addEventListener('resize', positionOverseasButton);
+
             // 用于防止移动端点击穿透的标志
             let modalJustOpened = false;
             let modalOpenTimer = null;
 
             // 打开模态框
             function openModal(title, citiesList) {
+                console.log('openModal - title:', title, ', 数据:', citiesList);
+
                 const modal = document.getElementById('glassModal');
                 const overlay = document.getElementById('modalOverlay');
                 const titleEl = document.getElementById('modalTitle');
@@ -791,11 +830,12 @@
             // 将函数暴露到全局作用域
             window.closeModal = closeModal;
 
-            // 为海外按钮覆盖层添加点击事件
+            // 为海外按钮添加点击事件
             const overseasBtn = document.getElementById('overseasBtn');
             if (overseasBtn) {
                 overseasBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
+                    console.log('海外按钮被点击，数据:', provinceCities['海外']);
                     const overseasData = provinceCities['海外'] || ['暂无海外数据'];
                     openModal('🌍 海外', overseasData);
                 });
