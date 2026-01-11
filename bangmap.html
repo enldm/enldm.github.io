@@ -607,8 +607,6 @@
                 return response.json();
             })
         ]).then(([mapData, provinceCities]) => {
-            console.log('数据加载成功，海外数据:', provinceCities['海外']);
-
             // 注册中国地图
             echarts.registerMap('china', mapData);
 
@@ -676,46 +674,6 @@
                             }
                         }
                     }
-                ],
-                graphic: [
-                    {
-                        type: 'group',
-                        left: '20px',
-                        top: '40px',
-                        name: 'btn-overseas',
-                        silent: false,
-                        children: [
-                            {
-                                type: 'rect',
-                                shape: {
-                                    width: 50,
-                                    height: 35,
-                                    r: 8,
-                                },
-                                style: {
-                                    fill: '#DB0054',
-                                },
-                                cursor: 'pointer',
-                                silent: false,
-                            },
-                            {
-                                type: 'text',
-                                style: {
-                                    text: '海外',
-                                    fontSize: 14,
-                                    fontWeight: 'bold',
-                                    fill: '#fff',
-                                    align: 'center',
-                                    verticalAlign: 'middle',
-                                    x: 25,
-                                    y: 17,
-                                    textAlign: 'center',
-                                    verticalAlign: 'middle'
-                                },
-                                silent: false,
-                            }
-                        ]
-                    }
                 ]
             };
 
@@ -743,8 +701,6 @@
 
             // 打开模态框
             function openModal(title, citiesList) {
-                console.log('openModal - title:', title, ', 数据:', citiesList);
-
                 const modal = document.getElementById('glassModal');
                 const overlay = document.getElementById('modalOverlay');
                 const titleEl = document.getElementById('modalTitle');
@@ -835,7 +791,6 @@
             if (overseasBtn) {
                 overseasBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    console.log('海外按钮被点击，数据:', provinceCities['海外']);
                     const overseasData = provinceCities['海外'] || ['暂无海外数据'];
                     openModal('🌍 海外', overseasData);
                 });
@@ -849,12 +804,8 @@
                 openModal(`📍 ${provinceName}`, cities);
             });
 
-            // 添加加载完成提示
-            console.log('地图数据加载成功！按F12是想看什么？');
-
         })
             .catch(error => {
-                console.error('⚠地图数据加载失败:', error);
                 document.getElementById('infoPanel').innerHTML =
                     `<p style="color: #DB0054;">⚠地图数据加载失败：${error.message}</p>
                      <p style="color: #DB0054;">请检查网络连接或稍后重试。</p>`;
