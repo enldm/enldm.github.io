@@ -75,6 +75,18 @@
             border-radius: 20px;
             box-shadow: 0 4px 20px rgba(219, 0, 84, 0.15);
             backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        /* 海外按钮覆盖层 - 移动端兼容 */
+        .overseas-btn-overlay {
+            position: absolute;
+            top: 40px;
+            left: 20px;
+            width: 50px;
+            height: 35px;
+            z-index: 100;
+            cursor: pointer;
         }
 
         /* 毛玻璃悬浮窗样式 */
@@ -357,7 +369,9 @@
             <p>キラキラドキドキ</p>
         </div>
 
-        <div id="map"></div>
+        <div id="map">
+            <div class="overseas-btn-overlay" id="overseasBtn"></div>
+        </div>
 
 
         <div class="info-panel" id="infoPanel2">
@@ -647,6 +661,7 @@
                         left: '20px',
                         top: '40px',
                         name: 'btn-overseas',
+                        silent: false,
                         children: [
                             {
                                 type: 'rect',
@@ -659,6 +674,7 @@
                                     fill: '#DB0054',
                                 },
                                 cursor: 'pointer',
+                                silent: false,
                             },
                             {
                                 type: 'text',
@@ -674,6 +690,7 @@
                                     textAlign: 'center',
                                     verticalAlign: 'middle'
                                 },
+                                silent: false,
                             }
                         ]
                     }
@@ -682,6 +699,10 @@
 
             // 设置配置项
             myChart.setOption(option);
+
+            // 用于防止移动端点击穿透的标志
+            let modalJustOpened = false;
+            let modalOpenTimer = null;
 
             // 打开模态框
             function openModal(title, citiesList) {
@@ -692,6 +713,13 @@
 
                 titleEl.textContent = title;
                 container.innerHTML = '';
+
+                // 设置标志，防止点击穿透
+                modalJustOpened = true;
+                if (modalOpenTimer) clearTimeout(modalOpenTimer);
+                modalOpenTimer = setTimeout(() => {
+                    modalJustOpened = false;
+                }, 300);
 
                 if (Array.isArray(citiesList) && citiesList.length > 0) {
                     citiesList.forEach(city => {
@@ -704,7 +732,11 @@
 
                         if (hasNumber) {
                             tag.textContent = city;
-                            tag.onclick = () => copyToClipboard(city, tag);
+                            tag.onclick = (e) => {
+                                // 防止模态框刚打开时触发复制
+                                if (modalJustOpened) return;
+                                copyToClipboard(city, tag);
+                            };
                         } else {
                             tag.textContent = city;
                             tag.classList.add('empty');
@@ -759,14 +791,19 @@
             // 将函数暴露到全局作用域
             window.closeModal = closeModal;
 
-            // 添加点击事件
-            myChart.on('click', function (params) {
-                if (params.componentType === 'graphic') {
+            // 为海外按钮覆盖层添加点击事件
+            const overseasBtn = document.getElementById('overseasBtn');
+            if (overseasBtn) {
+                overseasBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     const overseasData = provinceCities['海外'] || ['暂无海外数据'];
                     openModal('🌍 海外', overseasData);
-                    return;
-                }
+                });
+            }
 
+            // 添加地图省份点击事件
+            myChart.on('click', function (params) {
+                // 省份点击事件
                 const provinceName = params.name;
                 const cities = provinceCities[provinceName] || ['暂无该省数据'];
                 openModal(`📍 ${provinceName}`, cities);
