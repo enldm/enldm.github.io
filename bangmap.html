@@ -17,7 +17,50 @@
     <script defer src="https://cloud.umami.is/script.js"
         data-website-id="ad547ccf-627a-4293-a348-8ef6c860aa63"></script>
     <title>全国BanG Dream!同好会地图</title>
-    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
+    <!-- 多 CDN 并行加载 ECharts，哪个快用哪个 -->
+    <script>
+    (function() {
+        const cdnList = [
+            'https://cdn.bootcdn.net/ajax/libs/echarts/5.4.0/echarts.min.js',
+            'https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js'
+        ];
+
+        let loaded = false;
+
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                if (loaded) return;
+
+                const script = document.createElement('script');
+                script.src = src;
+                script.async = true;
+
+                script.onload = () => {
+                    if (!loaded) {
+                        loaded = true;
+                        console.log('ECharts loaded from:', src);
+                        resolve();
+                    }
+                };
+
+                script.onerror = () => {
+                    // 忽略错误，继续尝试其他 CDN
+                    resolve();
+                };
+
+                document.head.appendChild(script);
+            });
+        }
+
+        // 等待任一 CDN 加载完成后触发初始化
+        Promise.race(cdnList.map(loadScript)).then(() => {
+            if (loaded) {
+                // ECharts 加载完成，触发初始化
+                document.dispatchEvent(new Event('echarts-ready'));
+            }
+        });
+    })();
+    </script>
     <!-- 加载 Turnstile JS -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script defer src="/js/mouse-icon-effect.js"></script>
@@ -593,25 +636,31 @@
             return data;
         }
 
-        // 初始化ECharts
-        const myChart = echarts.init(document.getElementById('map'));
+        // 等待 ECharts 加载完成后再初始化地图
+        document.addEventListener('echarts-ready', function() {
+            initMap();
+        });
 
-        // 加载中国地图数据和省份城市数据
-        Promise.all([
-            fetch('mapdata.json').then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            }),
-            // 修改为调用 API 接口
-            fetch('https://mapapi.enldm.cyou/api/bandori').then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-        ]).then(([mapData, apiResponse]) => {
+        function initMap() {
+            // 初始化ECharts
+            const myChart = echarts.init(document.getElementById('map'));
+
+            // 加载中国地图数据和省份城市数据
+            Promise.all([
+                fetch('mapdata.json').then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                }),
+                // 修改为调用 API 接口
+                fetch('https://mapapi.enldm.cyou/api/bandori').then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+            ]).then(([mapData, apiResponse]) => {
             // 将 API 返回的数据转换为原来的格式
             const provinceCities = {};
 
@@ -906,17 +955,12 @@
                 openModal(`📍 ${provinceName}`, cities);
             });
 
-        })
-            .catch(error => {
-                document.getElementById('infoPanel').innerHTML =
-                    `<p style="color: #DB0054;">⚠地图数据加载失败：${error.message}</p>
-                     <p style="color: #DB0054;">请检查网络连接或稍后重试。</p>`;
+            // 处理窗口大小变化
+            window.addEventListener('resize', function () {
+                myChart.resize();
             });
-
-        // 处理窗口大小变化
-        window.addEventListener('resize', function () {
-            myChart.resize();
-        });
+        }); // end of .then()
+        } // end of initMap()
 
         // 在线投稿
         async function submitMessage() {
