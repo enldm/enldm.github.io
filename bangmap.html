@@ -645,20 +645,33 @@
             // 初始化ECharts
             const myChart = echarts.init(document.getElementById('map'));
 
+            // 获取当前页面的基础路径，支持 GitHub Pages 子路径部署
+            const baseURL = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/');
+
+            console.log('Loading mapdata from:', baseURL + 'mapdata.json');
+
             // 加载中国地图数据和省份城市数据
             Promise.all([
-                fetch('mapdata.json').then(response => {
+                fetch(baseURL + 'mapdata.json').then(response => {
+                    console.log('mapdata.json response status:', response.status);
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     return response.json();
+                }).catch(error => {
+                    console.error('Failed to load mapdata.json:', error);
+                    throw error;
                 }),
                 // 修改为调用 API 接口
                 fetch('https://mapapi.enldm.cyou/api/bandori').then(response => {
+                    console.log('API response status:', response.status);
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     return response.json();
+                }).catch(error => {
+                    console.error('Failed to load API data:', error);
+                    throw error;
                 })
             ]).then(([mapData, apiResponse]) => {
             // 将 API 返回的数据转换为原来的格式
