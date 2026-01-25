@@ -52,11 +52,14 @@
             });
         }
 
-        // 等待任一 CDN 加载完成后触发初始化
-        Promise.race(cdnList.map(loadScript)).then(() => {
+        // 并行加载所有 CDN，任一成功即可
+        Promise.all(cdnList.map(loadScript)).then(() => {
             if (loaded) {
+                console.log('Dispatching echarts-ready event');
                 // ECharts 加载完成，触发初始化
                 document.dispatchEvent(new Event('echarts-ready'));
+            } else {
+                console.error('All CDNs failed to load ECharts');
             }
         });
     })();
@@ -636,12 +639,27 @@
             return data;
         }
 
+        // 调试：页面加载日志
+        console.log('Page loaded, waiting for ECharts...');
+
         // 等待 ECharts 加载完成后再初始化地图
         document.addEventListener('echarts-ready', function() {
+            console.log('echarts-ready event fired!');
             initMap();
         });
 
+        // 备用机制：如果 3 秒后还没触发 echarts-ready，强制初始化
+        setTimeout(function() {
+            if (typeof echarts !== 'undefined') {
+                console.log('ECharts available, forcing initialization...');
+                initMap();
+            } else {
+                console.error('ECharts not loaded after 3 seconds!');
+            }
+        }, 3000);
+
         function initMap() {
+            console.log('initMap() called');
             // 初始化ECharts
             const myChart = echarts.init(document.getElementById('map'));
 
