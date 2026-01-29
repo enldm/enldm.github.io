@@ -17,14 +17,10 @@
     <script defer src="https://cloud.umami.is/script.js"
         data-website-id="ad547ccf-627a-4293-a348-8ef6c860aa63"></script>
     <title>全国BanG Dream!同好会地图</title>
-    <!-- 多 CDN 并行加载 ECharts，哪个快用哪个 -->
+    <!-- 本地加载 ECharts -->
     <script>
     (function() {
-        const cdnList = [
-            'https://cdn.bootcdn.net/ajax/libs/echarts/5.4.0/echarts.min.js',
-            'https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js'
-        ];
-
+        const scriptSrc = 'echarts.min.js';
         let loaded = false;
 
         function loadScript(src) {
@@ -33,7 +29,7 @@
 
                 const script = document.createElement('script');
                 script.src = src;
-                script.async = true;
+                script.async = false;  // 同步加载，确保顺序
 
                 script.onload = () => {
                     if (!loaded) {
@@ -44,23 +40,19 @@
                 };
 
                 script.onerror = () => {
-                    // 忽略错误，继续尝试其他 CDN
-                    resolve();
+                    console.error('Failed to load ECharts from:', src);
+                    reject();
                 };
 
                 document.head.appendChild(script);
             });
         }
 
-        // 并行加载所有 CDN，任一成功即可
-        Promise.all(cdnList.map(loadScript)).then(() => {
-            if (loaded) {
-                console.log('Dispatching echarts-ready event');
-                // ECharts 加载完成，触发初始化
-                document.dispatchEvent(new Event('echarts-ready'));
-            } else {
-                console.error('All CDNs failed to load ECharts');
-            }
+        loadScript(scriptSrc).then(() => {
+            console.log('Dispatching echarts-ready event');
+            document.dispatchEvent(new Event('echarts-ready'));
+        }).catch(() => {
+            console.error('ECharts loading failed');
         });
     })();
     </script>
@@ -847,7 +839,7 @@
                     container.appendChild(regionTitle);
 
                     citiesList.region.forEach(city => {
-                        const tag = createTag(city, modalJustOpened);
+                        const tag = createTag(city);
                         container.appendChild(tag);
                     });
                 }
@@ -868,7 +860,7 @@
                     container.appendChild(schoolTitle);
 
                     citiesList.school.forEach(city => {
-                        const tag = createTag(city, modalJustOpened);
+                        const tag = createTag(city);
                         container.appendChild(tag);
                     });
                 }
@@ -883,7 +875,7 @@
                     }
 
                     citiesList.other.forEach(city => {
-                        const tag = createTag(city, modalJustOpened);
+                        const tag = createTag(city);
                         container.appendChild(tag);
                     });
                 }
@@ -900,7 +892,7 @@
             }
 
             // 创建标签的辅助函数
-            function createTag(city, modalJustOpened) {
+            function createTag(city) {
                 const tag = document.createElement('div');
                 tag.className = 'group-tag';
 
@@ -908,13 +900,27 @@
                 const numberMatch = city.match(/\d+/g);
                 const hasNumber = numberMatch && numberMatch.length > 0;
 
+                console.log('createTag:', city, 'hasNumber:', hasNumber);
+
                 if (hasNumber) {
                     tag.textContent = city;
-                    tag.onclick = (e) => {
+                    tag.style.pointerEvents = 'auto';  // 确保可以点击
+
+                    // 使用 addEventListener，检查外部的 modalJustOpened 变量
+                    tag.addEventListener('click', function(e) {
+                        console.log('Tag clicked:', city, 'modalJustOpened:', modalJustOpened);
+                        e.preventDefault();
+                        e.stopPropagation();
                         // 防止模态框刚打开时触发复制
-                        if (modalJustOpened) return;
+                        if (modalJustOpened) {
+                            console.log('Copy blocked: modal just opened');
+                            return;
+                        }
+                        console.log('Calling copyToClipboard...');
                         copyToClipboard(city, tag);
-                    };
+                    });
+
+                    console.log('addEventListener attached to:', city);
                 } else {
                     tag.textContent = city;
                     tag.classList.add('empty');
