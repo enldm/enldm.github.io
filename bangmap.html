@@ -19,42 +19,42 @@
     <title>全国BanG Dream!同好会地图</title>
     <!-- 本地加载 ECharts -->
     <script>
-    (function() {
-        const scriptSrc = 'echarts.min.js';
-        let loaded = false;
+        (function () {
+            const scriptSrc = 'echarts.min.js';
+            let loaded = false;
 
-        function loadScript(src) {
-            return new Promise((resolve, reject) => {
-                if (loaded) return;
+            function loadScript(src) {
+                return new Promise((resolve, reject) => {
+                    if (loaded) return;
 
-                const script = document.createElement('script');
-                script.src = src;
-                script.async = false;  // 同步加载，确保顺序
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.async = false;  // 同步加载，确保顺序
 
-                script.onload = () => {
-                    if (!loaded) {
-                        loaded = true;
-                        console.log('ECharts loaded from:', src);
-                        resolve();
-                    }
-                };
+                    script.onload = () => {
+                        if (!loaded) {
+                            loaded = true;
+                            console.log('ECharts loaded from:', src);
+                            resolve();
+                        }
+                    };
 
-                script.onerror = () => {
-                    console.error('Failed to load ECharts from:', src);
-                    reject();
-                };
+                    script.onerror = () => {
+                        console.error('Failed to load ECharts from:', src);
+                        reject();
+                    };
 
-                document.head.appendChild(script);
+                    document.head.appendChild(script);
+                });
+            }
+
+            loadScript(scriptSrc).then(() => {
+                console.log('Dispatching echarts-ready event');
+                document.dispatchEvent(new Event('echarts-ready'));
+            }).catch(() => {
+                console.error('ECharts loading failed');
             });
-        }
-
-        loadScript(scriptSrc).then(() => {
-            console.log('Dispatching echarts-ready event');
-            document.dispatchEvent(new Event('echarts-ready'));
-        }).catch(() => {
-            console.error('ECharts loading failed');
-        });
-    })();
+        })();
     </script>
     <!-- 加载 Turnstile JS -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -440,17 +440,28 @@
             <p>🔗 <a
                     href="https://enldm.cyou/2025/10/%E5%85%A8%E5%9B%BD%E9%82%A6%E9%82%A6%E5%9C%B0%E5%9B%BE%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%97/">开发&更新日志</a>
             </p>
-            <p>🔧 工具大全：<a href="https://bestdori.com/">Bestdori</a> <a href="https://bang-dream.com/">BanG-Dream官网</a>
+            <p>🔧 其他地图：<a href="https://bestdori.com/">Bestdori</a> <a href="https://bang-dream.com/">BanG-Dream官网</a>
                 <a href="https://game.bilibili.com/bangdream/exchange/">手游兑换码</a>
                 <a href="https://enldm.cyou/pjskmap">全国Project Sekai同好会地图</a>
             </p>
-            <p>✉️ 投稿勘误：加入Q群 636949985 或发送邮件至 <a href="mailto:admin@enldm.cyou">admin@enldm.cyou</a></p>
-            <p style="text-align: center;">❤ 特别鸣谢：<a href="https://seieya.ip-ddns.com/">@zkylin</a> <a
+            <p>🔗 <a href="https://docs.qq.com/sheet/DZWFoR0pxa2tpdGRT">全国拉邦结派企划群聊收录文档</a>
+            </p>
+            <p>✉️ 投稿勘误：QQ群 636949985 或 <a href="mailto:admin@enldm.cyou">admin@enldm.cyou</a></p>
+            <p style="text-align: center;">特别鸣谢：<a href="https://seieya.ip-ddns.com/">@zkylin</a> <a
                     href="https://enldm.cyou">@enldm</a></p>
         </div>
 
         <div id="contact-form">
             <h3>在线投稿</h3>
+            <div class="form-group">
+                <select id="franchiseSelect" required>
+                    <option value="">请选择音企</option>
+                    <option value="Love Live">Love Live</option>
+                    <option value="BanG Dream" selected>BanG Dream</option>
+                    <option value="Project SEKAI">Project SEKAI</option>
+                    <option value="IDOLM@STER">IDOLM@STER</option>
+                </select>
+            </div>
             <div class="form-group">
                 <select id="submissionType">
                     <option value="">请选择投稿类型</option>
@@ -635,13 +646,13 @@
         console.log('Page loaded, waiting for ECharts...');
 
         // 等待 ECharts 加载完成后再初始化地图
-        document.addEventListener('echarts-ready', function() {
+        document.addEventListener('echarts-ready', function () {
             console.log('echarts-ready event fired!');
             initMap();
         });
 
         // 备用机制：如果 3 秒后还没触发 echarts-ready，强制初始化
-        setTimeout(function() {
+        setTimeout(function () {
             if (typeof echarts !== 'undefined') {
                 console.log('ECharts available, forcing initialization...');
                 initMap();
@@ -684,327 +695,333 @@
                     throw error;
                 })
             ]).then(([mapData, apiResponse]) => {
-            // 将 API 返回的数据转换为原来的格式
-            const provinceCities = {};
+                // 将 API 返回的数据转换为原来的格式
+                const provinceCities = {};
 
-            if (apiResponse.success && apiResponse.data) {
-                apiResponse.data.forEach(item => {
-                    // 只展示已认证的数据
-                    if (item.verified !== 1) {
-                        return;
-                    }
+                if (apiResponse.success && apiResponse.data) {
+                    apiResponse.data.forEach(item => {
+                        // 只展示已认证的数据
+                        if (item.verified !== 1) {
+                            return;
+                        }
 
-                    const province = item.province;
-                    if (!provinceCities[province]) {
-                        provinceCities[province] = {
-                            region: [],
-                            school: [],
-                            other: []
-                        };
-                    }
+                        const province = item.province;
+                        if (!provinceCities[province]) {
+                            provinceCities[province] = {
+                                region: [],
+                                school: [],
+                                other: []
+                            };
+                        }
 
-                    // 构建显示文本
-                    let displayText = item.name;
+                        // 构建显示文本
+                        let displayText = item.name;
 
-                    // 添加群号信息
-                    if (item.info) {
-                        displayText += ` - ${item.info}`;
-                    }
+                        // 添加群号信息
+                        if (item.info) {
+                            displayText += ` - ${item.info}`;
+                        }
 
-                    // 按类型分类存储
-                    if (item.type === 'region') {
-                        provinceCities[province].region.push(displayText);
-                    } else if (item.type === 'school') {
-                        provinceCities[province].school.push(displayText);
-                    } else {
-                        provinceCities[province].other.push(displayText);
-                    }
-                });
-            }
-            // 注册中国地图
-            echarts.registerMap('china', mapData);
+                        // 按类型分类存储
+                        if (item.type === 'region') {
+                            provinceCities[province].region.push(displayText);
+                        } else if (item.type === 'school') {
+                            provinceCities[province].school.push(displayText);
+                        } else {
+                            provinceCities[province].other.push(displayText);
+                        }
+                    });
+                }
+                // 注册中国地图
+                echarts.registerMap('china', mapData);
 
-            // 配置地图选项
-            const option = {
-                tooltip: {
-                    trigger: 'item',
-                    formatter: function (params) {
-                        return params.name;
+                // 配置地图选项
+                const option = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            return params.name;
+                        },
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        borderColor: '#DB0054',
+                        borderWidth: 2,
+                        textStyle: {
+                            color: '#DB0054',
+                            fontSize: 14
+                        }
                     },
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    borderColor: '#DB0054',
-                    borderWidth: 2,
-                    textStyle: {
-                        color: '#DB0054',
-                        fontSize: 14
-                    }
-                },
-                visualMap: {
-                    show: false
-                },
-                series: [
-                    {
-                        name: '省份',
-                        type: 'map',
-                        map: 'china',
-                        roam: true,
-                        zoom: 1.6,
-                        center: [105, 36],
-                        data: createMapData(),
-                        label: {
-                            show: true,
-                            fontSize: 14,
-                            color: '#333',
-                            fontWeight: 'bold',
-                            formatter: function (params) {
-                                let name = params.name;
-                                name = name
-                                    .replace(/特别行政区$/, '')
-                                    .replace(/壮族自治区$/, '')
-                                    .replace(/维吾尔自治区$/, '')
-                                    .replace(/回族自治区$/, '')
-                                    .replace(/自治区$/, '')
-                                    .replace(/省$/, '');
-                                return name;
-                            }
-                        },
-                        itemStyle: {
-                            borderColor: '#ffffff',
-                            borderWidth: 2,
-                            opacity: 0.9
-                        },
-                        emphasis: {
-                            itemStyle: {
-                                areaColor: '#DB0054',
-                                shadowBlur: 20,
-                                shadowColor: 'rgba(219, 0, 84, 0.5)',
-                                opacity: 1
-                            },
+                    visualMap: {
+                        show: false
+                    },
+                    series: [
+                        {
+                            name: '省份',
+                            type: 'map',
+                            map: 'china',
+                            roam: true,
+                            zoom: 1.6,
+                            center: [105, 36],
+                            data: createMapData(),
                             label: {
                                 show: true,
-                                color: '#fff',
-                                fontSize: 13,
-                                fontWeight: 'bold'
+                                fontSize: 14,
+                                color: '#333',
+                                fontWeight: 'bold',
+                                formatter: function (params) {
+                                    let name = params.name;
+                                    name = name
+                                        .replace(/特别行政区$/, '')
+                                        .replace(/壮族自治区$/, '')
+                                        .replace(/维吾尔自治区$/, '')
+                                        .replace(/回族自治区$/, '')
+                                        .replace(/自治区$/, '')
+                                        .replace(/省$/, '');
+                                    return name;
+                                }
+                            },
+                            itemStyle: {
+                                borderColor: '#ffffff',
+                                borderWidth: 2,
+                                opacity: 0.9
+                            },
+                            emphasis: {
+                                itemStyle: {
+                                    areaColor: '#DB0054',
+                                    shadowBlur: 20,
+                                    shadowColor: 'rgba(219, 0, 84, 0.5)',
+                                    opacity: 1
+                                },
+                                label: {
+                                    show: true,
+                                    color: '#fff',
+                                    fontSize: 13,
+                                    fontWeight: 'bold'
+                                }
                             }
                         }
+                    ]
+                };
+
+                // 设置配置项
+                myChart.setOption(option);
+
+                // 动态定位海外按钮
+                const mapContainer = document.getElementById('map');
+                const overseasBtnWrapper = document.getElementById('overseasBtnWrapper');
+
+                function positionOverseasButton() {
+                    const mapRect = mapContainer.getBoundingClientRect();
+                    overseasBtnWrapper.style.top = (mapRect.top + 40) + 'px';
+                    overseasBtnWrapper.style.left = (mapRect.left + 20) + 'px';
+                }
+
+                // 初始定位
+                positionOverseasButton();
+                // 窗口大小改变时重新定位
+                window.addEventListener('resize', positionOverseasButton);
+
+                // 用于防止移动端点击穿透的标志
+                let modalJustOpened = false;
+                let modalOpenTimer = null;
+
+                // 打开模态框
+                function openModal(title, citiesList) {
+                    const modal = document.getElementById('glassModal');
+                    const overlay = document.getElementById('modalOverlay');
+                    const titleEl = document.getElementById('modalTitle');
+                    const container = document.getElementById('groupsContainer');
+
+                    titleEl.textContent = title;
+                    container.innerHTML = '';
+
+                    // 设置标志，防止点击穿透
+                    modalJustOpened = true;
+                    if (modalOpenTimer) clearTimeout(modalOpenTimer);
+                    modalOpenTimer = setTimeout(() => {
+                        modalJustOpened = false;
+                    }, 300);
+
+                    // 处理新的数据结构（带分类）
+                    if (citiesList.region && citiesList.region.length > 0) {
+                        // 添加地区大群标题
+                        const regionTitle = document.createElement('div');
+                        regionTitle.style.cssText = 'width: 100%; color: #DB0054; font-size: 18px; font-weight: bold; margin: 10px 0; padding-bottom: 5px; border-bottom: 2px solid rgba(219, 0, 84, 0.2);';
+                        regionTitle.textContent = '📍 地区大群';
+                        container.appendChild(regionTitle);
+
+                        citiesList.region.forEach(city => {
+                            const tag = createTag(city);
+                            container.appendChild(tag);
+                        });
                     }
-                ]
-            };
 
-            // 设置配置项
-            myChart.setOption(option);
-
-            // 动态定位海外按钮
-            const mapContainer = document.getElementById('map');
-            const overseasBtnWrapper = document.getElementById('overseasBtnWrapper');
-
-            function positionOverseasButton() {
-                const mapRect = mapContainer.getBoundingClientRect();
-                overseasBtnWrapper.style.top = (mapRect.top + 40) + 'px';
-                overseasBtnWrapper.style.left = (mapRect.left + 20) + 'px';
-            }
-
-            // 初始定位
-            positionOverseasButton();
-            // 窗口大小改变时重新定位
-            window.addEventListener('resize', positionOverseasButton);
-
-            // 用于防止移动端点击穿透的标志
-            let modalJustOpened = false;
-            let modalOpenTimer = null;
-
-            // 打开模态框
-            function openModal(title, citiesList) {
-                const modal = document.getElementById('glassModal');
-                const overlay = document.getElementById('modalOverlay');
-                const titleEl = document.getElementById('modalTitle');
-                const container = document.getElementById('groupsContainer');
-
-                titleEl.textContent = title;
-                container.innerHTML = '';
-
-                // 设置标志，防止点击穿透
-                modalJustOpened = true;
-                if (modalOpenTimer) clearTimeout(modalOpenTimer);
-                modalOpenTimer = setTimeout(() => {
-                    modalJustOpened = false;
-                }, 300);
-
-                // 处理新的数据结构（带分类）
-                if (citiesList.region && citiesList.region.length > 0) {
-                    // 添加地区大群标题
-                    const regionTitle = document.createElement('div');
-                    regionTitle.style.cssText = 'width: 100%; color: #DB0054; font-size: 18px; font-weight: bold; margin: 10px 0; padding-bottom: 5px; border-bottom: 2px solid rgba(219, 0, 84, 0.2);';
-                    regionTitle.textContent = '📍 地区大群';
-                    container.appendChild(regionTitle);
-
-                    citiesList.region.forEach(city => {
-                        const tag = createTag(city);
-                        container.appendChild(tag);
-                    });
-                }
-
-                // 添加分界线（如果有学校数据）
-                if (citiesList.school && citiesList.school.length > 0 &&
-                    citiesList.region && citiesList.region.length > 0) {
-                    const divider = document.createElement('div');
-                    divider.style.cssText = 'width: 100%; height: 2px; background: linear-gradient(to right, transparent, rgba(219, 0, 84, 0.3), transparent); margin: 20px 0;';
-                    container.appendChild(divider);
-                }
-
-                if (citiesList.school && citiesList.school.length > 0) {
-                    // 添加学校标题
-                    const schoolTitle = document.createElement('div');
-                    schoolTitle.style.cssText = 'width: 100%; color: #DB0054; font-size: 18px; font-weight: bold; margin: 10px 0; padding-bottom: 5px; border-bottom: 2px solid rgba(219, 0, 84, 0.2);';
-                    schoolTitle.textContent = '🏫 学校';
-                    container.appendChild(schoolTitle);
-
-                    citiesList.school.forEach(city => {
-                        const tag = createTag(city);
-                        container.appendChild(tag);
-                    });
-                }
-
-                // 其他类型
-                if (citiesList.other && citiesList.other.length > 0) {
-                    if ((citiesList.region && citiesList.region.length > 0) ||
-                        (citiesList.school && citiesList.school.length > 0)) {
+                    // 添加分界线（如果有学校数据）
+                    if (citiesList.school && citiesList.school.length > 0 &&
+                        citiesList.region && citiesList.region.length > 0) {
                         const divider = document.createElement('div');
                         divider.style.cssText = 'width: 100%; height: 2px; background: linear-gradient(to right, transparent, rgba(219, 0, 84, 0.3), transparent); margin: 20px 0;';
                         container.appendChild(divider);
                     }
 
-                    citiesList.other.forEach(city => {
-                        const tag = createTag(city);
-                        container.appendChild(tag);
-                    });
-                }
+                    if (citiesList.school && citiesList.school.length > 0) {
+                        // 添加学校标题
+                        const schoolTitle = document.createElement('div');
+                        schoolTitle.style.cssText = 'width: 100%; color: #DB0054; font-size: 18px; font-weight: bold; margin: 10px 0; padding-bottom: 5px; border-bottom: 2px solid rgba(219, 0, 84, 0.2);';
+                        schoolTitle.textContent = '🏫 学校';
+                        container.appendChild(schoolTitle);
 
-                // 如果没有任何数据
-                if ((!citiesList.region || citiesList.region.length === 0) &&
-                    (!citiesList.school || citiesList.school.length === 0) &&
-                    (!citiesList.other || citiesList.other.length === 0)) {
-                    container.innerHTML = '<div class="group-tag empty">暂无数据</div>';
-                }
-
-                modal.classList.add('active');
-                overlay.classList.add('active');
-            }
-
-            // 创建标签的辅助函数
-            function createTag(city) {
-                const tag = document.createElement('div');
-                tag.className = 'group-tag';
-
-                // 检查是否包含数字
-                const numberMatch = city.match(/\d+/g);
-                const hasNumber = numberMatch && numberMatch.length > 0;
-
-                console.log('createTag:', city, 'hasNumber:', hasNumber);
-
-                if (hasNumber) {
-                    tag.textContent = city;
-                    tag.style.pointerEvents = 'auto';  // 确保可以点击
-
-                    // 使用 addEventListener，检查外部的 modalJustOpened 变量
-                    tag.addEventListener('click', function(e) {
-                        console.log('Tag clicked:', city, 'modalJustOpened:', modalJustOpened);
-                        e.preventDefault();
-                        e.stopPropagation();
-                        // 防止模态框刚打开时触发复制
-                        if (modalJustOpened) {
-                            console.log('Copy blocked: modal just opened');
-                            return;
-                        }
-                        console.log('Calling copyToClipboard...');
-                        copyToClipboard(city, tag);
-                    });
-
-                    console.log('addEventListener attached to:', city);
-                } else {
-                    tag.textContent = city;
-                    tag.classList.add('empty');
-                }
-
-                return tag;
-            }
-
-            // 关闭模态框
-            function closeModal() {
-                const modal = document.getElementById('glassModal');
-                const overlay = document.getElementById('modalOverlay');
-                modal.classList.remove('active');
-                overlay.classList.remove('active');
-            }
-
-            // 复制到剪贴板
-            function copyToClipboard(text, element) {
-                // 提取数字
-                const numbers = text.match(/\d+/g);
-                if (numbers && numbers.length > 0) {
-                    const numberToCopy = numbers[numbers.length - 1]; // 复制最后一个数字
-
-                    navigator.clipboard.writeText(numberToCopy).then(() => {
-                        // 显示复制成功状态
-                        element.classList.add('copied');
-                        element.textContent = '已复制！';
-
-                        // 显示提示
-                        const toast = document.getElementById('copyToast');
-                        toast.classList.add('show');
-
-                        setTimeout(() => {
-                            element.classList.remove('copied');
-                            element.textContent = text;
-                            toast.classList.remove('show');
-                        }, 1500);
-                    }).catch(err => {
-                        console.error('复制失败:', err);
-                        alert('复制失败，请手动复制');
-                    });
-                }
-            }
-
-            // 将函数暴露到全局作用域
-            window.closeModal = closeModal;
-
-            // 为海外按钮添加点击事件
-            const overseasBtn = document.getElementById('overseasBtn');
-            if (overseasBtn) {
-                overseasBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const overseasData = provinceCities['海外'] || {region: [], school: [], other: []};
-                    if (!overseasData.region && !overseasData.school && !overseasData.other) {
-                        overseasData = {region: ['暂无海外数据'], school: [], other: []};
+                        citiesList.school.forEach(city => {
+                            const tag = createTag(city);
+                            container.appendChild(tag);
+                        });
                     }
-                    openModal('🌍 海外', overseasData);
-                });
-            }
 
-            // 添加地图省份点击事件
-            myChart.on('click', function (params) {
-                // 省份点击事件
-                const provinceName = params.name;
-                const cities = provinceCities[provinceName] || {region: [], school: [], other: []};
-                if (!cities.region && !cities.school && !cities.other) {
-                    cities = {region: ['暂无该省数据'], school: [], other: []};
+                    // 其他类型
+                    if (citiesList.other && citiesList.other.length > 0) {
+                        if ((citiesList.region && citiesList.region.length > 0) ||
+                            (citiesList.school && citiesList.school.length > 0)) {
+                            const divider = document.createElement('div');
+                            divider.style.cssText = 'width: 100%; height: 2px; background: linear-gradient(to right, transparent, rgba(219, 0, 84, 0.3), transparent); margin: 20px 0;';
+                            container.appendChild(divider);
+                        }
+
+                        citiesList.other.forEach(city => {
+                            const tag = createTag(city);
+                            container.appendChild(tag);
+                        });
+                    }
+
+                    // 如果没有任何数据
+                    if ((!citiesList.region || citiesList.region.length === 0) &&
+                        (!citiesList.school || citiesList.school.length === 0) &&
+                        (!citiesList.other || citiesList.other.length === 0)) {
+                        container.innerHTML = '<div class="group-tag empty">暂无数据</div>';
+                    }
+
+                    modal.classList.add('active');
+                    overlay.classList.add('active');
                 }
-                openModal(`📍 ${provinceName}`, cities);
-            });
 
-            // 处理窗口大小变化
-            window.addEventListener('resize', function () {
-                myChart.resize();
-            });
-        }); // end of .then()
+                // 创建标签的辅助函数
+                function createTag(city) {
+                    const tag = document.createElement('div');
+                    tag.className = 'group-tag';
+
+                    // 检查是否包含数字
+                    const numberMatch = city.match(/\d+/g);
+                    const hasNumber = numberMatch && numberMatch.length > 0;
+
+                    console.log('createTag:', city, 'hasNumber:', hasNumber);
+
+                    if (hasNumber) {
+                        tag.textContent = city;
+                        tag.style.pointerEvents = 'auto';  // 确保可以点击
+
+                        // 使用 addEventListener，检查外部的 modalJustOpened 变量
+                        tag.addEventListener('click', function (e) {
+                            console.log('Tag clicked:', city, 'modalJustOpened:', modalJustOpened);
+                            e.preventDefault();
+                            e.stopPropagation();
+                            // 防止模态框刚打开时触发复制
+                            if (modalJustOpened) {
+                                console.log('Copy blocked: modal just opened');
+                                return;
+                            }
+                            console.log('Calling copyToClipboard...');
+                            copyToClipboard(city, tag);
+                        });
+
+                        console.log('addEventListener attached to:', city);
+                    } else {
+                        tag.textContent = city;
+                        tag.classList.add('empty');
+                    }
+
+                    return tag;
+                }
+
+                // 关闭模态框
+                function closeModal() {
+                    const modal = document.getElementById('glassModal');
+                    const overlay = document.getElementById('modalOverlay');
+                    modal.classList.remove('active');
+                    overlay.classList.remove('active');
+                }
+
+                // 复制到剪贴板
+                function copyToClipboard(text, element) {
+                    // 提取数字
+                    const numbers = text.match(/\d+/g);
+                    if (numbers && numbers.length > 0) {
+                        const numberToCopy = numbers[numbers.length - 1]; // 复制最后一个数字
+
+                        navigator.clipboard.writeText(numberToCopy).then(() => {
+                            // 显示复制成功状态
+                            element.classList.add('copied');
+                            element.textContent = '已复制！';
+
+                            // 显示提示
+                            const toast = document.getElementById('copyToast');
+                            toast.classList.add('show');
+
+                            setTimeout(() => {
+                                element.classList.remove('copied');
+                                element.textContent = text;
+                                toast.classList.remove('show');
+                            }, 1500);
+                        }).catch(err => {
+                            console.error('复制失败:', err);
+                            alert('复制失败，请手动复制');
+                        });
+                    }
+                }
+
+                // 将函数暴露到全局作用域
+                window.closeModal = closeModal;
+
+                // 为海外按钮添加点击事件
+                const overseasBtn = document.getElementById('overseasBtn');
+                if (overseasBtn) {
+                    overseasBtn.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        const overseasData = provinceCities['海外'] || { region: [], school: [], other: [] };
+                        if (!overseasData.region && !overseasData.school && !overseasData.other) {
+                            overseasData = { region: ['暂无海外数据'], school: [], other: [] };
+                        }
+                        openModal('🌍 海外', overseasData);
+                    });
+                }
+
+                // 添加地图省份点击事件
+                myChart.on('click', function (params) {
+                    // 省份点击事件
+                    const provinceName = params.name;
+                    const cities = provinceCities[provinceName] || { region: [], school: [], other: [] };
+                    if (!cities.region && !cities.school && !cities.other) {
+                        cities = { region: ['暂无该省数据'], school: [], other: [] };
+                    }
+                    openModal(`📍 ${provinceName}`, cities);
+                });
+
+                // 处理窗口大小变化
+                window.addEventListener('resize', function () {
+                    myChart.resize();
+                });
+            }); // end of .then()
         } // end of initMap()
 
         // 在线投稿
         async function submitMessage() {
+            const franchiseSelect = document.getElementById('franchiseSelect').value.trim();
             const submissionType = document.getElementById('submissionType').value.trim();
             const locationName = document.getElementById('locationName').value.trim();
             const groupNumber = document.getElementById('groupNumber').value.trim();
             const turnstileToken = window.turnstile?.getResponse();
+
+            if (!franchiseSelect) {
+                alert('请选择音企');
+                return;
+            }
 
             if (!submissionType) {
                 alert('请选择投稿类型');
@@ -1026,7 +1043,7 @@
                 return;
             }
 
-            const message = `【${submissionType}】${locationName} - 群号：${groupNumber}`;
+            const message = `【${franchiseSelect}】${submissionType} - ${locationName} - ${groupNumber}`;
 
             const url = 'https://tgapi.enldm.cyou/';
 
@@ -1044,6 +1061,7 @@
 
                 if (data.success) {
                     alert('✅ 投稿已发送！感谢您的贡献！');
+                    document.getElementById('franchiseSelect').value = 'BanG Dream';
                     document.getElementById('submissionType').value = '';
                     document.getElementById('locationName').value = '';
                     document.getElementById('groupNumber').value = '';
