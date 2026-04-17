@@ -145,17 +145,20 @@
             padding: 20px;
             margin-bottom: 15px;
             border-left: 4px solid #ff9800;
+            text-align: center;
         }
 
         .result-name {
             font-size: 1.5em;
             color: #fff;
             margin-bottom: 10px;
+            text-align: left;
         }
 
         .result-desc {
             color: #ccc;
             line-height: 1.6;
+            text-align: left;
         }
 
         .result-percent {
@@ -322,58 +325,58 @@
     <script>
         const personalities = {
             vehicle: {
-                name: “载具佬”,
-                icon: “🚀”,
-                image: “background/载具佬.png”,
-                desc: “你从出生那一刻起就不想碰地面。坦克、装甲车、飞机、直升机——只要是能开的，你都要占为己有。当载具被摧毁时，你会感到人生失去了意义。复活点？那是给步兵用的，你只认载具出生点。”
+                name: "载具佬",
+                icon: "🚀",
+                image: "background/载具佬.png",
+                desc: "你从出生那一刻起就不想碰地面。坦克、装甲车、飞机、直升机——只要是能开的，你都要占为己有。当载具被摧毁时，你会感到人生失去了意义。复活点？那是给步兵用的，你只认载具出生点。"
             },
             aa: {
-                name: “AA人”,
-                icon: “🛡️”,
-                image: “background/AA人.png”,
-                desc: “你的存在意义就是让天空变成禁飞区。当你看到敌机时，眼睛会发光。专职防空，热爱AA车和毒刺，时刻准备着给那些嚣张的飞行员一个惊喜。天上的鸟最好都别飞过你的头顶。既然捞了我那你一这一把都别想好好捞薯条。”
+                name: "AA人",
+                icon: "🛡️",
+                image: "background/AA人.png",
+                desc: "你的存在意义就是让天空变成禁飞区。当你看到敌机时，眼睛会发光。专职防空，热爱AA车和毒刺，时刻准备着给那些嚣张的飞行员一个惊喜。天上的鸟最好都别飞过你的头顶。既然捞了我那你一这一把都别想好好捞薯条。"
             },
             infantry: {
-                name: “步站踹哈哥”,
-                icon: “🏃”,
-                image: “background/步站踹哈哥.png”,
-                desc: “你是纯粹的地面战士，步枪和配备就是你的灵魂。不需要载具，不需要支援，一双战术靴走天下。擅长突袭点位，占领目标，你是团队中那些真正在玩游戏的人。载具？那是什么，能吃吗？”
+                name: "步站踹哈哥",
+                icon: "🏃",
+                image: "background/步站踹哈哥.png",
+                desc: "你是纯粹的地面战士，步枪和配备就是你的灵魂。不需要载具，不需要支援，一双战术靴走天下。擅长突袭点位，占领目标，你是团队中那些真正在玩游戏的人。载具？那是什么，能吃吗？"
             },
             medic: {
-                name: “萨尼铁塔”,
-                icon: “💉”,
-                image: “background/萨尼铁塔.png”,
-                desc: “你是团队的守护天使，带着医疗包和除颤器四处奔波。救人性命比杀人更重要，看到倒地的队友就像看到亲人。你的K/D可能很难看，但你不在乎——复活数才是你的真实K/D。”
+                name: "萨尼铁塔",
+                icon: "💉",
+                image: "background/萨尼铁塔.png",
+                desc: "你是团队的守护天使，带着医疗包和除颤器四处奔波。救人性命比杀人更重要，看到倒地的队友就像看到亲人。你的K/D可能很难看，但你不在乎——复活数才是你的真实K/D。"
             },
             camper: {
-                name: “架枪逼”,
-                icon: “🎯”,
-                image: “background/架枪逼.png”,
-                desc: “你找到了一个完美的角落，机枪架好，阔剑和APS摆在脚边，谁来都不好使。一个黑暗的点位可以守住整个世纪。队友可能会骂你，但敌人更恨你这个Camper。你不移动，你只等待。队友死活关我屁事。”
+                name: "架枪逼",
+                icon: "🎯",
+                image: "background/架枪逼.png",
+                desc: "你找到了一个完美的角落，机枪架好，阔剑和APS摆在脚边，谁来都不好使。一个黑暗的点位可以守住整个世纪。队友可能会骂你，但敌人更恨你这个Camper。你不移动，你只等待。队友死活关我屁事。"
             },
             toxic: {
-                name: “嘴臭哥”,
-                icon: “😤”,
-                image: “background/嘴臭哥.png”,
-                desc: “你的武器不是枪，是你的嘴。全局聊天活跃分子，擅长从敌方心理层面击溃对手。杀人不如诛心，你的毒液能让全服玩家都记住你的ID。技术一般，但气势不输。”
+                name: "嘴臭哥",
+                icon: "😤",
+                image: "background/嘴臭哥.png",
+                desc: "你的武器不是枪，是你的嘴。全局聊天活跃分子，擅长从敌方心理层面击溃对手。杀人不如诛心，你的毒液能让全服玩家都记住你的ID。技术一般，但气势不输。"
             },
             commander: {
-                name: “指挥官”,
-                icon: “👑”,
-                image: “background/指挥官.png”,
-                desc: “你是天生的指挥官，地图上的小点和公屏是你的朝堂。虽然没人听你的，但这不影响你指挥全局。擅长部署命令，标记敌人，战术分析。队友可能觉得你烦，但你知道——这是为他们好。”
+                name: "指挥官",
+                icon: "👑",
+                image: "background/指挥官.png",
+                desc: "你是天生的指挥官，地图上的小点和公屏是你的朝堂。虽然没人听你的，但这不影响你指挥全局。擅长部署命令，标记敌人，战术分析。队友可能觉得你烦，但你知道——这是为他们好。"
             },
             suicide: {
-                name: “自爆步兵”,
-                icon: “💥”,
-                image: “background/自爆步兵.png”,
-                desc: “C4就是你的初恋，吉普车是你的信使。你的生命意义就是和敌人的载具同归于尽。虽然你的K/D是0.1，但每次换掉的坦克都价值连城。你是战场上的恐怖分子，敌人看到吉普车就害怕。我要是皇帝，看见我刚提的小队支援载具给你立马踢咯！”
+                name: "自爆步兵",
+                icon: "💥",
+                image: "background/自爆步兵.png",
+                desc: "C4就是你的初恋，吉普车是你的信使。你的生命意义就是和敌人的载具同归于尽。虽然你的K/D是0.1，但每次换掉的坦克都价值连城。你是战场上的恐怖分子，敌人看到吉普车就害怕。我要是皇帝，看见我刚提的小队支援载具给你立马踢咯！"
             },
             sniper: {
-                name: “狙击佬”,
-                icon: “🔭”,
-                image: “background/狙击佬.png”,
-                desc: “地图边缘的守望者，一千米外的一击必杀。你可以在同一个位置趴整局，只为那一个完美的射击机会。团队可能输掉比赛，但你的狙击数一定很漂亮。千里之外取敌首级，事了拂衣去。然后看着公屏的”GUA!”之后立马与服务器断线。”
+                name: "狙击佬",
+                icon: "🔭",
+                image: "background/狙击佬.png",
+                desc: "地图边缘的守望者，一千米外的一击必杀。你可以在同一个位置趴整局，只为那一个完美的射击机会。团队可能输掉比赛，但你的狙击数一定很漂亮。千里之外取敌首级，事了拂衣去。然后看着公屏的 GUA! 之后立马与服务器断线。"
             }
         };
 
@@ -751,7 +754,7 @@
                     turnstileWidgetId = turnstile.render('#turnstile-container', {
                         sitekey: '0x4AAAAAAC9he1XsF5gvDxdQ',
                         theme: 'dark',
-                        callback: function(token) {
+                        callback: function (token) {
                             document.getElementById('turnstile-error').style.display = 'none';
                         }
                     });
@@ -825,7 +828,7 @@
 
             } catch (error) {
                 console.error('生成AI评论时出错:', error);
-                commentContent.innerHTML = '<p style="color: #ff6b6b;">❌ 生成评论时发生错误，请检查网络连接或稍后再试。</p>';
+                commentContent.innerHTML = '<p style="color: #ff6b6b;">❌ 生成评论时发生错误，生成评论时发生错误，有可能是服务器问题，多次失败可联系作者 admin@enldm.cyou </p>';
             } finally {
                 btn.disabled = false;
                 btn.textContent = '🤖 重新生成AI锐评';
