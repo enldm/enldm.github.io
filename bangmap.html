@@ -361,6 +361,44 @@
                 <mdui-menu-item value="学校">高校（暂不收录K12）</mdui-menu-item>
                 <mdui-menu-item value="其他">其他</mdui-menu-item>
             </mdui-select>
+            <mdui-select id="provinceSelect" variant="outlined" label="省份" class="form-item"
+                placeholder="请选择省份">
+                <mdui-menu-item value="北京">北京</mdui-menu-item>
+                <mdui-menu-item value="天津">天津</mdui-menu-item>
+                <mdui-menu-item value="上海">上海</mdui-menu-item>
+                <mdui-menu-item value="重庆">重庆</mdui-menu-item>
+                <mdui-menu-item value="河北">河北</mdui-menu-item>
+                <mdui-menu-item value="山西">山西</mdui-menu-item>
+                <mdui-menu-item value="辽宁">辽宁</mdui-menu-item>
+                <mdui-menu-item value="吉林">吉林</mdui-menu-item>
+                <mdui-menu-item value="黑龙江">黑龙江</mdui-menu-item>
+                <mdui-menu-item value="江苏">江苏</mdui-menu-item>
+                <mdui-menu-item value="浙江">浙江</mdui-menu-item>
+                <mdui-menu-item value="安徽">安徽</mdui-menu-item>
+                <mdui-menu-item value="福建">福建</mdui-menu-item>
+                <mdui-menu-item value="江西">江西</mdui-menu-item>
+                <mdui-menu-item value="山东">山东</mdui-menu-item>
+                <mdui-menu-item value="河南">河南</mdui-menu-item>
+                <mdui-menu-item value="湖北">湖北</mdui-menu-item>
+                <mdui-menu-item value="湖南">湖南</mdui-menu-item>
+                <mdui-menu-item value="广东">广东</mdui-menu-item>
+                <mdui-menu-item value="海南">海南</mdui-menu-item>
+                <mdui-menu-item value="四川">四川</mdui-menu-item>
+                <mdui-menu-item value="贵州">贵州</mdui-menu-item>
+                <mdui-menu-item value="云南">云南</mdui-menu-item>
+                <mdui-menu-item value="陕西">陕西</mdui-menu-item>
+                <mdui-menu-item value="甘肃">甘肃</mdui-menu-item>
+                <mdui-menu-item value="青海">青海</mdui-menu-item>
+                <mdui-menu-item value="台湾">台湾</mdui-menu-item>
+                <mdui-menu-item value="内蒙古">内蒙古</mdui-menu-item>
+                <mdui-menu-item value="广西">广西</mdui-menu-item>
+                <mdui-menu-item value="西藏">西藏</mdui-menu-item>
+                <mdui-menu-item value="宁夏">宁夏</mdui-menu-item>
+                <mdui-menu-item value="新疆">新疆</mdui-menu-item>
+                <mdui-menu-item value="香港">香港</mdui-menu-item>
+                <mdui-menu-item value="澳门">澳门</mdui-menu-item>
+                <mdui-menu-item value="海外">海外</mdui-menu-item>
+            </mdui-select>
             <mdui-text-field id="locationName" variant="outlined" label="学校/城市名称"
                 placeholder="请输入完整学校/城市名称"></mdui-text-field>
             <mdui-text-field id="groupNumber" variant="outlined" label="群号"
@@ -798,6 +836,7 @@
         async function submitMessage() {
             const franchiseSelect = document.getElementById('franchiseSelect').value.trim();
             const submissionType = document.getElementById('submissionType').value.trim();
+            const province = document.getElementById('provinceSelect').value.trim();
             const locationName = document.getElementById('locationName').value.trim();
             const groupNumber = document.getElementById('groupNumber').value.trim();
             const turnstileToken = window.turnstile ? window.turnstile.getResponse() : undefined;
@@ -809,6 +848,11 @@
 
             if (!submissionType) {
                 toast('请选择投稿类型');
+                return;
+            }
+
+            if (!province) {
+                toast('请选择省份');
                 return;
             }
 
@@ -827,7 +871,7 @@
                 return;
             }
 
-            const message = '【' + franchiseSelect + '】' + submissionType + ' - ' + locationName + ' - ' + groupNumber;
+            const message = '【' + franchiseSelect + '】' + province + ' - ' + submissionType + ' - ' + locationName + ' - ' + groupNumber;
 
             const url = 'https://tgapi.enldm.cyou/';
 
@@ -842,6 +886,11 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         message: message,
+                        franchise: franchiseSelect,
+                        province: province,
+                        ftype: submissionType,
+                        name: locationName,
+                        group: groupNumber,
                         'cf-turnstile-response': turnstileToken
                     })
                 });
@@ -852,6 +901,7 @@
                     toast('✅ 投稿已发送！感谢您的贡献！');
                     document.getElementById('franchiseSelect').value = 'BanG Dream';
                     document.getElementById('submissionType').value = '';
+                    document.getElementById('provinceSelect').value = '';
                     document.getElementById('locationName').value = '';
                     document.getElementById('groupNumber').value = '';
                     window.turnstile.reset();
