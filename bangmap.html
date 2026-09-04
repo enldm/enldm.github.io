@@ -832,6 +832,23 @@
             });
         }
 
+        /* ============ 修复：限制下拉菜单最大高度（省份等长列表可滚动） ============ */
+        (function () {
+            function limitSelectMenuHeight() {
+                document.querySelectorAll('mdui-select').forEach(function (select) {
+                    var menu = select.shadowRoot && select.shadowRoot.querySelector('mdui-menu');
+                    if (menu) {
+                        menu.style.maxHeight = '60vh';
+                        menu.style.overflowY = 'auto';
+                    }
+                });
+            }
+            limitSelectMenuHeight();
+            requestAnimationFrame(function () {
+                requestAnimationFrame(limitSelectMenuHeight);
+            });
+        })();
+
         /* ============ 在线投稿 ============ */
         async function submitMessage() {
             const franchiseSelect = document.getElementById('franchiseSelect').value.trim();
