@@ -403,6 +403,8 @@
                 placeholder="请输入完整学校/城市名称"></mdui-text-field>
             <mdui-text-field id="groupNumber" variant="outlined" label="群号"
                 placeholder="请输入正确的群号"></mdui-text-field>
+            <mdui-text-field id="remarkField" variant="outlined" label="备注说明（可选）"
+                placeholder="补充信息，如特殊情况、其他联系方式等"></mdui-text-field>
             <!-- Turnstile Widget -->
             <div class="turnstile-box">
                 <div class="cf-turnstile" data-sitekey="0x4AAAAAAB7bLKDGHTTCmU9N" data-theme="light"
@@ -856,6 +858,7 @@
             const province = document.getElementById('provinceSelect').value.trim();
             const locationName = document.getElementById('locationName').value.trim();
             const groupNumber = document.getElementById('groupNumber').value.trim();
+            const remark = document.getElementById('remarkField').value.trim().slice(0, 200);
             const turnstileToken = window.turnstile ? window.turnstile.getResponse() : undefined;
 
             if (!franchiseSelect) {
@@ -908,6 +911,7 @@
                         ftype: submissionType,
                         name: locationName,
                         group: groupNumber,
+                        remark: remark,
                         'cf-turnstile-response': turnstileToken
                     })
                 });
@@ -921,6 +925,7 @@
                     document.getElementById('provinceSelect').value = '';
                     document.getElementById('locationName').value = '';
                     document.getElementById('groupNumber').value = '';
+                    document.getElementById('remarkField').value = '';
                     window.turnstile.reset();
                 } else {
                     toast('❌ 发送失败：' + (data.error || '未知错误'));
